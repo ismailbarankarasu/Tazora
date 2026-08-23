@@ -11,14 +11,22 @@ namespace Tazora
             builder.Services.AddSingleton<DatabaseService>();
             builder
                 .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                    .ConfigureFonts(fonts =>
+                         {
+                             fonts.AddFont(
+                                 "Inter_18pt-Regular.ttf",
+                                 "InterRegular");
 
+                             fonts.AddFont(
+                                 "Inter_18pt-Bold.ttf",
+                                 "InterBold");
+
+                             fonts.AddFont(
+                                 "MaterialSymbolsOutlined-Regular.ttf",
+                                 "MaterialSymbols");
+                         });
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
