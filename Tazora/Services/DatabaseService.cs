@@ -12,6 +12,7 @@ public class DatabaseService
 
     private async Task InitializeAsync()
     {
+
         if (_isInitialized)
             return;
 
@@ -32,10 +33,228 @@ public class DatabaseService
         await _database.CreateTableAsync<User>();
         await _database.CreateTableAsync<CustomerOrder>();
         await _database.CreateTableAsync<OrderItem>();
-
+        await SeedDataAsync();
         _isInitialized = true;
     }
+    private async Task SeedDataAsync()
+    {
+        if (_database is null)
+            throw new InvalidOperationException(
+                "Seed işlemi için veritabanı bağlantısı bulunamadı.");
 
+        var categoryCount = await _database
+            .Table<Category>()
+            .CountAsync();
+
+        if (categoryCount > 0)
+            return;
+
+        var categories = new List<Category>
+    {
+        new()
+        {
+            Name = "Meyve & Sebze",
+            ImageName = "category_fruit_vegetable.jpg",
+            IconCode = "\ue2e7",
+            DisplayOrder = 1
+        },
+        new()
+        {
+            Name = "Süt & Kahvaltı",
+            ImageName = "category_dairy.jpg",
+            IconCode = "\ueb47",
+            DisplayOrder = 2
+        },
+        new()
+        {
+            Name = "Et & Tavuk",
+            ImageName = "category_meat.jpg",
+            IconCode = "\ue56c",
+            DisplayOrder = 3
+        },
+        new()
+        {
+            Name = "İçecek",
+            ImageName = "category_drinks.jpg",
+            IconCode = "\ue540",
+            DisplayOrder = 4
+        },
+        new()
+        {
+            Name = "Atıştırmalık",
+            ImageName = "category_snacks.jpg",
+            IconCode = "\uea69",
+            DisplayOrder = 5
+        },
+        new()
+        {
+            Name = "Temel Gıda",
+            ImageName = "category_grocery.jpg",
+            IconCode = "\ue8cc",
+            DisplayOrder = 6
+        }
+    };
+
+        foreach (var category in categories)
+        {
+            await _database.InsertAsync(category);
+        }
+
+        var products = new List<Product>
+    {
+        new()
+        {
+            CategoryId = categories[0].Id,
+            Name = "Amasya Elması",
+            Description = "Taze ve özenle seçilmiş Amasya elması.",
+            Unit = "1 kg",
+            Price = 25.50m,
+            ImageName = "product_apple.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[0].Id,
+            Name = "İthal Muz",
+            Description = "Olgun ve tatlı ithal muz.",
+            Unit = "1 kg",
+            Price = 49.90m,
+            ImageName = "product_banana.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[0].Id,
+            Name = "Salkım Domates",
+            Description = "Günlük ve taze salkım domates.",
+            Unit = "1 kg",
+            Price = 34.50m,
+            ImageName = "product_tomato.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[0].Id,
+            Name = "Organik Ispanak",
+            Description = "Taze organik ıspanak.",
+            Unit = "500 g",
+            Price = 18.90m,
+            ImageName = "product_spinach.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[1].Id,
+            Name = "Taze Kaşar Peyniri",
+            Description = "Kahvaltılar için taze kaşar peyniri.",
+            Unit = "600 g",
+            Price = 170.00m,
+            ImageName = "product_cheese.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[1].Id,
+            Name = "Organik Yumurta",
+            Description = "Doğal ortamda yetiştirilen tavuklardan organik yumurta.",
+            Unit = "10'lu paket",
+            Price = 85.00m,
+            ImageName = "product_eggs.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[2].Id,
+            Name = "Tavuk Göğsü",
+            Description = "Taze ve paketlenmiş tavuk göğsü.",
+            Unit = "1 kg",
+            Price = 189.90m,
+            ImageName = "product_chicken.jpg"
+        },
+        new()
+        {
+            CategoryId = categories[3].Id,
+            Name = "Doğal Maden Suyu",
+            Description = "Doğal mineralli maden suyu.",
+            Unit = "6 x 200 ml",
+            Price = 54.90m,
+            ImageName = "product_mineral_water.jpg"
+        },
+        new()
+        {
+            CategoryId = categories[4].Id,
+            Name = "Patates Cipsi",
+            Description = "Çıtır ve klasik lezzetli patates cipsi.",
+            Unit = "150 g",
+            Price = 44.90m,
+            ImageName = "product_chips.jpg"
+        },
+        new()
+        {
+            CategoryId = categories[5].Id,
+            Name = "Ekşi Mayalı Köy Ekmeği",
+            Description = "Geleneksel yöntemlerle hazırlanan ekşi mayalı ekmek.",
+            Unit = "1 adet",
+            Price = 32.50m,
+            ImageName = "product_bread.jpg",
+            IsPopular = true
+        },
+        new()
+        {
+            CategoryId = categories[5].Id,
+            Name = "Soğuk Sıkım Zeytinyağı",
+            Description = "Doğal soğuk sıkım zeytinyağı.",
+            Unit = "750 ml",
+            Price = 145.00m,
+            ImageName = "product_olive_oil.jpg"
+        }
+    };
+
+        foreach (var product in products)
+        {
+            await _database.InsertAsync(product);
+        }
+
+        var currentDate = DateTime.UtcNow;
+
+        var discounts = new List<Discount>
+    {
+        new()
+        {
+            Title = "İlk Siparişine Özel",
+            Description = "İlk siparişinde seçili ürünlerde %30 indirim.",
+            ImageName = "campaign_first_order.jpg",
+            DiscountRate = 30,
+            StartDate = currentDate.AddDays(-1),
+            EndDate = currentDate.AddDays(30)
+        },
+        new()
+        {
+            ProductId = products[1].Id,
+            Title = "İthal Muz Fırsatı",
+            Description = "İthal muzda kaçırılmayacak indirim.",
+            ImageName = "campaign_banana.jpg",
+            DiscountRate = 15,
+            StartDate = currentDate.AddDays(-1),
+            EndDate = currentDate.AddDays(7)
+        },
+        new()
+        {
+            ProductId = products[4].Id,
+            Title = "Kahvaltılık Fırsatı",
+            Description = "Taze kaşar peynirinde özel indirim.",
+            ImageName = "campaign_breakfast.jpg",
+            DiscountRate = 20,
+            StartDate = currentDate.AddDays(-1),
+            EndDate = currentDate.AddDays(7)
+        }
+    };
+
+        foreach (var discount in discounts)
+        {
+            await _database.InsertAsync(discount);
+        }
+    }
     private async Task<SQLiteAsyncConnection> GetDatabaseAsync()
     {
         await InitializeAsync();
