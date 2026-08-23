@@ -42,4 +42,27 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+    <!-- Tazora Brand Colors -->
+    <Color x:Key="TazoraPrimary">#087F3D</Color>
+    <Color x:Key="TazoraPrimaryDark">#05652F</Color>
+    <Color x:Key="TazoraPrimaryLight">#7CF29D</Color>
+    <Color x:Key="TazoraPrimarySoft">#E8F7E8</Color>
+
+    <Color x:Key="TazoraBackground">#F4FBEF</Color>
+    <Color x:Key="TazoraSurface">#FFFFFF</Color>
+
+    <Color x:Key="TazoraTextPrimary">#171A18</Color>
+    <Color x:Key="TazoraTextSecondary">#667069</Color>
+    <Color x:Key="TazoraTextMuted">#929A94</Color>
+
+    <Color x:Key="TazoraBorder">#DCE5DA</Color>
+    <Color x:Key="TazoraDivider">#E8EDE7</Color>
+
+    <Color x:Key="TazoraDiscount">#C62828</Color>
+    <Color x:Key="TazoraError">#C62828</Color>
+    <Color x:Key="TazoraSuccess">#15803D</Color>
+    <Color x:Key="TazoraWarning">#F59E0B</Color>
+
+    <Color x:Key="TazoraDisabledBackground">#DCE5DA</Color>
+    <Color x:Key="TazoraDisabledText">#929A94</Color>
 </ResourceDictionary>
