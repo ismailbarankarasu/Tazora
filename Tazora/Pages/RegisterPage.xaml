@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Tazora.Pages.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
+    BackgroundColor="{StaticResource TazoraBackground}"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Top navigation -->
+        <Grid
+    Grid.Row="0"
+    HeightRequest="72"
+    Padding="16,8"
+    ColumnDefinitions="48,*,48">
+
+            <!-- Back button -->
+            <Border
+        Grid.Column="0"
+        WidthRequest="44"
+        HeightRequest="44"
+        Padding="0"
+        StrokeThickness="0"
+        BackgroundColor="Transparent"
+        VerticalOptions="Center">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+
+                <Label
+            Text="{x:Static helpers:IconFont.ArrowBack}"
+            Style="{StaticResource TazoraPrimaryIconLabel}"
+            FontSize="28" />
+            </Border>
+
+            <!-- Tazora logo -->
+            <HorizontalStackLayout
+        Grid.Column="1"
+        Spacing="7"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
+
+                <Border
+            WidthRequest="34"
+            HeightRequest="34"
+            Padding="0"
+            StrokeThickness="0"
+            BackgroundColor="{StaticResource TazoraPrimary}">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+
+                    <Label
+                Text="{x:Static helpers:IconFont.ShoppingBag}"
+                FontFamily="MaterialSymbols"
+                FontSize="21"
+                TextColor="White"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center" />
+                </Border>
+
+                <Label
+            Text="Tazora"
+            FontFamily="InterBold"
+            FontSize="22"
+            TextColor="{StaticResource TazoraPrimary}"
+            VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+
+        </Grid>
+
+        <!-- Keyboard-safe form -->
+        <ScrollView
+            Grid.Row="1"
+            VerticalScrollBarVisibility="Never">
+
+            <VerticalStackLayout
+                Padding="20,16,20,28"
+                Spacing="0">
+
+                <!-- Header -->
+                <Label
+                    Text="Hesap Oluştur"
+                    Style="{StaticResource TazoraPageTitleLabel}" />
+
+                <Label
+                    Text="Hızlı teslimatın tadını çıkarmaya başla"
+                    Style="{StaticResource TazoraSecondaryLabel}"
+                    FontSize="16"
+                    Margin="0,6,0,28" />
+
+                <!-- Full name -->
+                <Label
+                    Text="Ad Soyad"
+                    Style="{StaticResource TazoraFieldLabel}" />
+
+                <Border
+                    Style="{StaticResource TazoraInputBorder}"
+                    Margin="0,0,0,18">
+
+                    <Grid ColumnDefinitions="*,40">
+                        <Entry
+                            x:Name="FullNameEntry"
+                            Grid.Column="0"
+                            Placeholder="Örn. Ayşe Yılmaz"
+                            ReturnType="Next"
+                            Style="{StaticResource TazoraEntry}"
+                            ClearButtonVisibility="Never" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{x:Static helpers:IconFont.Person}"
+                            Style="{StaticResource TazoraIconLabel}"
+                            TextColor="{StaticResource TazoraTextMuted}" />
+                    </Grid>
+                </Border>
+
+                <Label
+                    x:Name="FullNameErrorLabel"
+                    Text="Ad soyad alanı zorunludur."
+                    Style="{StaticResource TazoraValidationLabel}" />
+
+                <!-- Email -->
+                <Label
+                    Text="E-posta"
+                    Style="{StaticResource TazoraFieldLabel}" />
+
+                <Border
+                    Style="{StaticResource TazoraInputBorder}"
+                    Margin="0,0,0,18">
+
+                    <Grid ColumnDefinitions="*,40">
+                        <Entry
+                            x:Name="EmailEntry"
+                            Grid.Column="0"
+                            Placeholder="ornek@mail.com"
+                            Keyboard="Email"
+                            ReturnType="Next"
+                            Style="{StaticResource TazoraEntry}"
+                            ClearButtonVisibility="Never" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{x:Static helpers:IconFont.Email}"
+                            Style="{StaticResource TazoraIconLabel}"
+                            TextColor="{StaticResource TazoraTextMuted}" />
+                    </Grid>
+                </Border>
+
+                <Label
+                    x:Name="EmailErrorLabel"
+                    Text="Geçerli bir e-posta adresi gir."
+                    Style="{StaticResource TazoraValidationLabel}" />
+
+                <!-- Phone -->
+                <Label
+                    Text="Telefon Numarası"
+                    Style="{StaticResource TazoraFieldLabel}" />
+
+                <Border
+                    Style="{StaticResource TazoraInputBorder}"
+                    Margin="0,0,0,18">
+
+                    <Grid ColumnDefinitions="*,40">
+                        <Entry
+                            x:Name="PhoneEntry"
+                            Grid.Column="0"
+                            Placeholder="05XX XXX XX XX"
+                            Keyboard="Telephone"
+                            MaxLength="15"
+                            ReturnType="Next"
+                            Style="{StaticResource TazoraEntry}"
+                            ClearButtonVisibility="Never" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{x:Static helpers:IconFont.Phone}"
+                            Style="{StaticResource TazoraIconLabel}"
+                            TextColor="{StaticResource TazoraTextMuted}" />
+                    </Grid>
+                </Border>
+
+                <Label
+                    x:Name="PhoneErrorLabel"
+                    Text="Geçerli bir telefon numarası gir."
+                    Style="{StaticResource TazoraValidationLabel}" />
+
+                <!-- Password -->
+                <Label
+                    Text="Şifre"
+                    Style="{StaticResource TazoraFieldLabel}" />
+
+                <Border Style="{StaticResource TazoraInputBorder}">
+
+                    <Grid ColumnDefinitions="*,44">
+                        <Entry
+                            x:Name="PasswordEntry"
+                            Grid.Column="0"
+                            Placeholder="En az 8 karakter"
+                            IsPassword="True"
+                            ReturnType="Done"
+                            Style="{StaticResource TazoraEntry}"
+                            ClearButtonVisibility="Never" />
+
+                        <Label
+                            x:Name="PasswordVisibilityIcon"
+                            Grid.Column="1"
+                            Text="{x:Static helpers:IconFont.VisibilityOff}"
+                            Style="{StaticResource TazoraIconLabel}"
+                            TextColor="{StaticResource TazoraTextMuted}" />
+                    </Grid>
+                </Border>
+
+                <Label
+                    x:Name="PasswordErrorLabel"
+                    Text="Şifre en az 8 karakter olmalıdır."
+                    Style="{StaticResource TazoraValidationLabel}" />
+
+                <!-- Terms -->
+                <Grid
+                    Margin="0,24,0,0"
+                    ColumnDefinitions="32,*">
+
+                    <CheckBox
+                        x:Name="TermsCheckBox"
+                        Grid.Column="0"
+                        Color="{StaticResource TazoraPrimary}"
+                        VerticalOptions="Start"
+                        Margin="-6,-5,0,0" />
+
+                    <Label
+                        Grid.Column="1"
+                        FontFamily="InterRegular"
+                        FontSize="13"
+                        TextColor="{StaticResource TazoraTextSecondary}"
+                        LineHeight="1.3">
+
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Kullanım Koşulları ve " />
+                                <Span
+                                    Text="Gizlilik Politikası"
+                                    TextColor="{StaticResource TazoraPrimary}"
+                                    FontFamily="InterBold" />
+                                <Span Text="'nı okudum ve kabul ediyorum." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+
+                <Label
+                    x:Name="TermsErrorLabel"
+                    Text="Devam etmek için kullanım koşullarını kabul etmelisin."
+                    Style="{StaticResource TazoraValidationLabel}" />
+
+                <!-- Register -->
+                <Button
+                    x:Name="RegisterButton"
+                    Text="Kayıt Ol"
+                    Style="{StaticResource TazoraPrimaryButton}"
+                    Margin="0,36,0,0" />
+
+                <ActivityIndicator
+                    x:Name="RegisterActivityIndicator"
+                    IsVisible="False"
+                    IsRunning="False"
+                    Color="{StaticResource TazoraPrimary}"
+                    HeightRequest="32"
+                    Margin="0,10,0,0" />
+
+                <!-- Login navigation -->
+                <HorizontalStackLayout
+                    HorizontalOptions="Center"
+                    Spacing="4"
+                    Margin="0,28,0,10">
+
+                    <Label
+                        Text="Zaten hesabın var mı?"
+                        Style="{StaticResource TazoraSecondaryLabel}" />
+
+                    <Label
+                        x:Name="GoToLoginLabel"
+                        Text="Giriş Yap"
+                        FontFamily="InterBold"
+                        FontSize="14"
+                        TextColor="{StaticResource TazoraPrimary}" />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
