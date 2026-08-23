@@ -1,12 +1,15 @@
 ﻿using SQLite;
 using Tazora.Models;
+using System.Security.Cryptography;
 
 namespace Tazora.Services;
 
 public class DatabaseService
 {
     private const string DatabaseFileName = @"C:\Users\ismai\OneDrive\Masaüstü\tazora.db";
-
+    private const int PasswordIterationCount = 100_000;
+    private const int PasswordSaltSize = 16;
+    private const int PasswordHashSize = 32;
     private SQLiteAsyncConnection? _database;
     private bool _isInitialized;
 
@@ -401,4 +404,127 @@ public class DatabaseService
             .CountAsync();
     }
 
+    public async Task<bool> IsEmailRegisteredAsync(string email)
+    {
+        var database = await GetDatabaseAsync();
+        var normalizedEmail = NormalizeEmail(email);
+
+        var userCount = await database
+            .Table<User>()
+            .Where(user => user.Email == normalizedEmail)
+            .CountAsync();
+
+        return userCount > 0;
+    }
+
+    public async Task<int> RegisterUserAsync(
+    string fullName,
+    string email,
+    string? phoneNumber,
+    string password)
+    {
+        var database = await GetDatabaseAsync();
+        var normalizedEmail = NormalizeEmail(email);
+
+        var isRegistered = await IsEmailRegisteredAsync(normalizedEmail);
+
+        if (isRegistered)
+        {
+            throw new InvalidOperationException(
+                "Bu e-posta adresi zaten kullanılıyor.");
+        }
+
+        var user = new User
+        {
+            FullName = fullName.Trim(),
+            Email = normalizedEmail,
+            PhoneNumber = phoneNumber?.Trim(),
+            PasswordHash = HashPassword(password),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await database.InsertAsync(user);
+
+        return user.Id;
+    }
+
+    public async Task<User?> LoginAsync(
+    string email,
+    string password)
+    {
+        var database = await GetDatabaseAsync();
+        var normalizedEmail = NormalizeEmail(email);
+
+        var user = await database
+            .Table<User>()
+            .Where(user => user.Email == normalizedEmail)
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+            return null;
+
+        var isPasswordValid = VerifyPassword(
+            password,
+            user.PasswordHash);
+
+        return isPasswordValid ? user : null;
+    }
+
+    private static string NormalizeEmail(string email)
+    {
+        return email.Trim().ToLowerInvariant();
+    }
+
+    private static string HashPassword(string password)
+    {
+        var salt = RandomNumberGenerator.GetBytes(
+            PasswordSaltSize);
+
+        var hash = Rfc2898DeriveBytes.Pbkdf2(
+            password,
+            salt,
+            PasswordIterationCount,
+            HashAlgorithmName.SHA256,
+            PasswordHashSize);
+
+        return string.Join(
+            ".",
+            PasswordIterationCount,
+            Convert.ToBase64String(salt),
+            Convert.ToBase64String(hash));
+    }
+
+    private static bool VerifyPassword(
+        string password,
+        string storedPasswordHash)
+    {
+        try
+        {
+            var parts = storedPasswordHash.Split('.');
+
+            if (parts.Length != 3)
+                return false;
+
+            if (!int.TryParse(parts[0], out var iterationCount))
+                return false;
+
+            var salt = Convert.FromBase64String(parts[1]);
+            var expectedHash = Convert.FromBase64String(parts[2]);
+
+            var actualHash = Rfc2898DeriveBytes.Pbkdf2(
+                password,
+                salt,
+                iterationCount,
+                HashAlgorithmName.SHA256,
+                expectedHash.Length);
+
+            return CryptographicOperations.FixedTimeEquals(
+                actualHash,
+                expectedHash);
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
 }
