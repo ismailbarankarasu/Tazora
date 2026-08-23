@@ -6,7 +6,7 @@ namespace Tazora.Services;
 
 public class DatabaseService
 {
-    private const string DatabaseFileName = @"C:\Users\ismai\OneDrive\Masaüstü\tazora.db";
+    private const string DatabaseFileName = "tazora.db";
     private const int PasswordIterationCount = 100_000;
     private const int PasswordSaltSize = 16;
     private const int PasswordHashSize = 32;
@@ -15,7 +15,6 @@ public class DatabaseService
 
     private async Task InitializeAsync()
     {
-
         if (_isInitialized)
             return;
 
@@ -23,11 +22,16 @@ public class DatabaseService
             FileSystem.AppDataDirectory,
             DatabaseFileName);
 
+        await CopyDatabaseAsync(databasePath);
+
         _database = new SQLiteAsyncConnection(
             databasePath,
             SQLiteOpenFlags.ReadWrite |
             SQLiteOpenFlags.Create |
             SQLiteOpenFlags.SharedCache);
+
+        await _database.ExecuteAsync(
+            "PRAGMA foreign_keys = ON;");
 
         await _database.CreateTableAsync<Category>();
         await _database.CreateTableAsync<Product>();
@@ -36,7 +40,9 @@ public class DatabaseService
         await _database.CreateTableAsync<User>();
         await _database.CreateTableAsync<CustomerOrder>();
         await _database.CreateTableAsync<OrderItem>();
+
         await SeedDataAsync();
+
         _isInitialized = true;
     }
     private async Task SeedDataAsync()
@@ -526,5 +532,21 @@ public class DatabaseService
         {
             return false;
         }
+    }
+
+    private static async Task CopyDatabaseAsync(
+    string destinationPath)
+    {
+        if (File.Exists(destinationPath))
+            return;
+
+        await using var sourceStream =
+            await FileSystem.OpenAppPackageFileAsync(
+                DatabaseFileName);
+
+        await using var destinationStream =
+            File.Create(destinationPath);
+
+        await sourceStream.CopyToAsync(destinationStream);
     }
 }
