@@ -1,14 +1,64 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
+
 <Shell
     x:Class="Tazora.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Tazora"
-    Title="Tazora">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarBackgroundColor="{StaticResource TazoraSurface}"
+    Shell.TabBarForegroundColor="{StaticResource TazoraPrimary}"
+    Shell.TabBarTitleColor="{StaticResource TazoraPrimary}"
+    Shell.TabBarUnselectedColor="{StaticResource TazoraTextSecondary}">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
 
+        <ShellContent
+            x:Name="HomeShellContent"
+            Title="Ana Sayfa"
+            Route="home">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialSymbols"
+                    Glyph="&#xE88A;"
+                    Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            x:Name="CategoriesShellContent"
+            Title="Kategoriler"
+            Route="categories">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialSymbols"
+                    Glyph="&#xE574;"
+                    Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            x:Name="BasketShellContent"
+            Title="Sepet"
+            Route="basket">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialSymbols"
+                    Glyph="&#xE8CC;"
+                    Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+        <ShellContent
+            x:Name="ProfileShellContent"
+            Title="Profil"
+            Route="profile">
+            <ShellContent.Icon>
+                <FontImageSource
+                    FontFamily="MaterialSymbols"
+                    Glyph="&#xE7FD;"
+                    Size="24" />
+            </ShellContent.Icon>
+        </ShellContent>
+
+    </TabBar>
 </Shell>
