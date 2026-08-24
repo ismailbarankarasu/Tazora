@@ -18,6 +18,7 @@
     ColumnDefinitions="48,*,48">
 
             <!-- Back button -->
+            
             <Border
         Grid.Column="0"
         WidthRequest="44"
@@ -206,13 +207,18 @@
                             ReturnType="Done"
                             Style="{StaticResource TazoraEntry}"
                             ClearButtonVisibility="Never" />
-
                         <Label
                             x:Name="PasswordVisibilityIcon"
                             Grid.Column="1"
                             Text="{x:Static helpers:IconFont.VisibilityOff}"
                             Style="{StaticResource TazoraIconLabel}"
-                            TextColor="{StaticResource TazoraTextMuted}" />
+                            TextColor="{StaticResource TazoraTextMuted}">
+
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+            Tapped="OnPasswordVisibilityTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
                     </Grid>
                 </Border>
 
@@ -262,8 +268,9 @@
                 <Button
                     x:Name="RegisterButton"
                     Text="Kayıt Ol"
+                    Clicked="OnRegisterClicked"
                     Style="{StaticResource TazoraPrimaryButton}"
-                    Margin="0,36,0,0" />
+                     Margin="0,36,0,0" />
 
                 <ActivityIndicator
                     x:Name="RegisterActivityIndicator"

@@ -8,7 +8,7 @@ public class BasketItem
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    [Indexed, Unique, NotNull]
+    [Unique, NotNull]
     public int ProductId { get; set; }
 
     [NotNull]

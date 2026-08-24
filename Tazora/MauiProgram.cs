@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Tazora.Pages;
 using Tazora.Services;
 
 namespace Tazora
@@ -9,6 +10,7 @@ namespace Tazora
         {
             var builder = MauiApp.CreateBuilder();
             builder.Services.AddSingleton<DatabaseService>();
+            builder.Services.AddTransient<RegisterPage>();
             builder
                 .UseMauiApp<App>()
                     .ConfigureFonts(fonts =>

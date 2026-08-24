@@ -11,7 +11,7 @@ public class User
     [NotNull, MaxLength(150)]
     public string FullName { get; set; } = string.Empty;
 
-    [Indexed, Unique, NotNull, MaxLength(150)]
+    [Unique, NotNull, MaxLength(150)]
     public string Email { get; set; } = string.Empty;
 
     [MaxLength(20)]
