@@ -21,7 +21,7 @@ public class DatabaseService
         var databasePath = Path.Combine(
             FileSystem.AppDataDirectory,
             DatabaseFileName);
-
+        System.Diagnostics.Debug.WriteLine( $"TAZORA DATABASE PATH: {databasePath}");
         await CopyDatabaseAsync(databasePath);
 
         _database = new SQLiteAsyncConnection(
