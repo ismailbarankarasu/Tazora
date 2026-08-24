@@ -4,10 +4,13 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:Tazora.Helpers"
+    xmlns:controls="clr-namespace:Tazora.Controls"
     BackgroundColor="{StaticResource TazoraBackground}"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
 
-    <ScrollView VerticalScrollBarVisibility="Never">
+    <Grid RowDefinitions="*,Auto">
+    <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
         <VerticalStackLayout Padding="20,18,20,32" Spacing="0">
 
             <!-- Address -->
@@ -324,4 +327,9 @@
 
         </VerticalStackLayout>
     </ScrollView>
+        <controls:BottomNavigationBar
+        Grid.Row="1"
+        HorizontalOptions="Fill" />
+
+    </Grid>
 </ContentPage>

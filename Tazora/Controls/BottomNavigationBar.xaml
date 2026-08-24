@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentView
+    x:Class="Tazora.Controls.BottomNavigationBar"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers">
+
+    <Border
+        HeightRequest="78"
+        Padding="8,7"
+        BackgroundColor="{StaticResource TazoraSurface}"
+        Stroke="{StaticResource TazoraDivider}">
+
+        <Grid ColumnDefinitions="*,*,*,*">
+
+            <VerticalStackLayout
+                Grid.Column="0"
+                Spacing="2"
+                HorizontalOptions="Center">
+
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+
+                <Label
+                    Text="{x:Static helpers:IconFont.Home}"
+                    FontFamily="MaterialSymbols"
+                    FontSize="25"
+                    TextColor="{StaticResource TazoraPrimary}"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="Ana Sayfa"
+                    FontFamily="InterBold"
+                    FontSize="11"
+                    TextColor="{StaticResource TazoraPrimary}" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Grid.Column="1"
+                Spacing="2"
+                HorizontalOptions="Center">
+
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCategoriesTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+
+                <Label
+                    Text="{x:Static helpers:IconFont.Categories}"
+                    FontFamily="MaterialSymbols"
+                    FontSize="25"
+                    TextColor="{StaticResource TazoraTextSecondary}"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="Kategoriler"
+                    FontFamily="InterRegular"
+                    FontSize="11"
+                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Grid.Column="2"
+                Spacing="2"
+                HorizontalOptions="Center">
+
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBasketTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+
+                <Label
+                    Text="{x:Static helpers:IconFont.ShoppingCart}"
+                    FontFamily="MaterialSymbols"
+                    FontSize="25"
+                    TextColor="{StaticResource TazoraTextSecondary}"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="Sepet"
+                    FontFamily="InterRegular"
+                    FontSize="11"
+                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout
+                Grid.Column="3"
+                Spacing="2"
+                HorizontalOptions="Center">
+
+                <VerticalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTapped" />
+                </VerticalStackLayout.GestureRecognizers>
+
+                <Label
+                    Text="{x:Static helpers:IconFont.Person}"
+                    FontFamily="MaterialSymbols"
+                    FontSize="25"
+                    TextColor="{StaticResource TazoraTextSecondary}"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="Profil"
+                    FontFamily="InterRegular"
+                    FontSize="11"
+                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+            </VerticalStackLayout>
+
+        </Grid>
+    </Border>
+</ContentView>

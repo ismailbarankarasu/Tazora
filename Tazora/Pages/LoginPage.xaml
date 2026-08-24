@@ -31,12 +31,12 @@
                     </Border.StrokeShape>
 
                     <Label
-                        Text="{x:Static helpers:IconFont.ShoppingBag}"
+                        Text="{x:Static helpers:IconFont.ShoppingCart}"
                         FontFamily="MaterialSymbols"
                         FontSize="30"
                         TextColor="White"
-                        HorizontalTextAlignment="Center"
-                        VerticalTextAlignment="Center" />
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
                 </Border>
 
                 <Label
