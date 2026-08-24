@@ -11,6 +11,7 @@ namespace Tazora
             var builder = MauiApp.CreateBuilder();
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<LoginPage>();
             builder
                 .UseMauiApp<App>()
                     .ConfigureFonts(fonts =>

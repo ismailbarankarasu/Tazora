@@ -295,7 +295,15 @@
                         Text="Giriş Yap"
                         FontFamily="InterBold"
                         FontSize="14"
-                        TextColor="{StaticResource TazoraPrimary}" />
+                        TextColor="{StaticResource TazoraPrimary}">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnGoToLoginTapped" />
+                        </Label.GestureRecognizers>
+
+                    </Label>
+
                 </HorizontalStackLayout>
 
             </VerticalStackLayout>

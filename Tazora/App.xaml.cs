@@ -17,10 +17,10 @@ public partial class App : Application
     protected override Window CreateWindow(
         IActivationState? activationState)
     {
-        var registerPage =
-            _serviceProvider.GetRequiredService<RegisterPage>();
+        var loginPage =
+            _serviceProvider.GetRequiredService<LoginPage>();
 
         return new Window(
-            new NavigationPage(registerPage));
+            new NavigationPage(loginPage));
     }
 }

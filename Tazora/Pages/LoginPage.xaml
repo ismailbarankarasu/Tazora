@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Tazora.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
+    BackgroundColor="{StaticResource TazoraBackground}"
+    Shell.NavBarIsVisible="False">
+
+    <ScrollView VerticalScrollBarVisibility="Never">
+
+        <VerticalStackLayout
+            Padding="24,64,24,32"
+            Spacing="0">
+
+            <!-- Logo -->
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="10">
+
+                <Border
+                    WidthRequest="52"
+                    HeightRequest="52"
+                    Padding="0"
+                    StrokeThickness="0"
+                    BackgroundColor="{StaticResource TazoraPrimary}">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="15" />
+                    </Border.StrokeShape>
+
+                    <Label
+                        Text="{x:Static helpers:IconFont.ShoppingBag}"
+                        FontFamily="MaterialSymbols"
+                        FontSize="30"
+                        TextColor="White"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center" />
+                </Border>
+
+                <Label
+                    Text="Tazora"
+                    FontFamily="InterBold"
+                    FontSize="32"
+                    TextColor="{StaticResource TazoraPrimary}"
+                    VerticalTextAlignment="Center" />
+
+            </HorizontalStackLayout>
+
+            <!-- Header -->
+            <Label
+                Text="Tekrar Hoş Geldin!"
+                Style="{StaticResource TazoraPageTitleLabel}"
+                HorizontalTextAlignment="Center"
+                Margin="0,48,0,0" />
+
+            <Label
+                Text="Hesabına giriş yap ve alışverişe devam et"
+                Style="{StaticResource TazoraSecondaryLabel}"
+                FontSize="15"
+                HorizontalTextAlignment="Center"
+                Margin="0,8,0,38" />
+
+            <!-- Email -->
+            <Label
+                Text="E-posta"
+                Style="{StaticResource TazoraFieldLabel}" />
+
+            <Border Style="{StaticResource TazoraInputBorder}">
+
+                <Grid ColumnDefinitions="*,44">
+
+                    <Entry
+                        x:Name="EmailEntry"
+                        Grid.Column="0"
+                        Placeholder="ornek@mail.com"
+                        Keyboard="Email"
+                        ReturnType="Next"
+                        ClearButtonVisibility="Never"
+                        Style="{StaticResource TazoraEntry}" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{x:Static helpers:IconFont.Email}"
+                        Style="{StaticResource TazoraIconLabel}"
+                        TextColor="{StaticResource TazoraTextMuted}" />
+
+                </Grid>
+            </Border>
+
+            <Label
+                x:Name="EmailErrorLabel"
+                Text="Geçerli bir e-posta adresi gir."
+                Style="{StaticResource TazoraValidationLabel}" />
+
+            <!-- Password -->
+            <Label
+                Text="Şifre"
+                Style="{StaticResource TazoraFieldLabel}"
+                Margin="4,20,0,6" />
+
+            <Border Style="{StaticResource TazoraInputBorder}">
+
+                <Grid ColumnDefinitions="*,44">
+
+                    <Entry
+                        x:Name="PasswordEntry"
+                        Grid.Column="0"
+                        Placeholder="Şifren"
+                        IsPassword="True"
+                        ReturnType="Done"
+                        ClearButtonVisibility="Never"
+                        Style="{StaticResource TazoraEntry}"
+                        Completed="OnPasswordCompleted" />
+
+                    <Label
+                        x:Name="PasswordVisibilityIcon"
+                        Grid.Column="1"
+                        Text="{x:Static helpers:IconFont.VisibilityOff}"
+                        Style="{StaticResource TazoraIconLabel}"
+                        TextColor="{StaticResource TazoraTextMuted}">
+
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Tapped="OnPasswordVisibilityTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                </Grid>
+            </Border>
+
+            <Label
+                x:Name="PasswordErrorLabel"
+                Text="Şifre alanı zorunludur."
+                Style="{StaticResource TazoraValidationLabel}" />
+
+            <!-- General login error -->
+            <Border
+                x:Name="LoginErrorBorder"
+                IsVisible="False"
+                Margin="0,20,0,0"
+                Padding="14,12"
+                BackgroundColor="#FDECEC"
+                Stroke="{StaticResource TazoraError}"
+                StrokeThickness="1">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+
+                <HorizontalStackLayout Spacing="10">
+
+                    <Label
+                        Text="!"
+                        FontFamily="InterBold"
+                        FontSize="15"
+                        TextColor="{StaticResource TazoraError}"
+                        VerticalTextAlignment="Center" />
+
+                    <Label
+                        x:Name="LoginErrorLabel"
+                        Text="E-posta veya şifre hatalı."
+                        FontFamily="InterRegular"
+                        FontSize="13"
+                        TextColor="{StaticResource TazoraError}"
+                        VerticalTextAlignment="Center" />
+
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Login button -->
+            <Button
+                x:Name="LoginButton"
+                Text="Giriş Yap"
+                Clicked="OnLoginClicked"
+                Style="{StaticResource TazoraPrimaryButton}"
+                Margin="0,34,0,0" />
+
+            <ActivityIndicator
+                x:Name="LoginActivityIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                HeightRequest="34"
+                Color="{StaticResource TazoraPrimary}"
+                Margin="0,10,0,0" />
+
+            <!-- Register navigation -->
+            <HorizontalStackLayout
+                HorizontalOptions="Center"
+                Spacing="4"
+                Margin="0,34,0,0">
+
+                <Label
+                    Text="Henüz hesabın yok mu?"
+                    Style="{StaticResource TazoraSecondaryLabel}" />
+
+                <Label
+                    Text="Kayıt Ol"
+                    FontFamily="InterBold"
+                    FontSize="14"
+                    TextColor="{StaticResource TazoraPrimary}">
+
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Tapped="OnGoToRegisterTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

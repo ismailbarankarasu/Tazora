@@ -46,6 +46,10 @@ public partial class RegisterPage : ContentPage
                 "Tamam");
 
             ClearForm();
+            if (Navigation.NavigationStack.Count > 1)
+            {
+                await Navigation.PopAsync();
+            }
         }
         catch (InvalidOperationException exception)
         {
@@ -207,6 +211,15 @@ public partial class RegisterPage : ContentPage
     private async void OnBackTapped(
         object sender,
         TappedEventArgs e)
+    {
+        if (Navigation.NavigationStack.Count > 1)
+        {
+            await Navigation.PopAsync();
+        }
+    }
+    private async void OnGoToLoginTapped(
+    object sender,
+    TappedEventArgs e)
     {
         if (Navigation.NavigationStack.Count > 1)
         {
