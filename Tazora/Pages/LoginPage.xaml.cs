@@ -9,18 +9,20 @@ public partial class LoginPage : ContentPage
 {
     private readonly DatabaseService _databaseService;
     private readonly IServiceProvider _serviceProvider;
-
+    private readonly AppSession _appSession;
     private bool _isPasswordVisible;
     private bool _isLoggingIn;
 
     public LoginPage(
         DatabaseService databaseService,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        AppSession appSession)
     {
         InitializeComponent();
 
         _databaseService = databaseService;
         _serviceProvider = serviceProvider;
+        _appSession = appSession;
     }
 
     private async void OnLoginClicked(
@@ -63,11 +65,21 @@ public partial class LoginPage : ContentPage
                 LoginErrorBorder.IsVisible = true;
                 return;
             }
+            _appSession.Start(user);
 
-            await DisplayAlert(
-                "Giriş Başarılı",
-                $"Hoş geldin, {user.FullName}!",
-                "Devam Et");
+            var appShell =
+                _serviceProvider.GetRequiredService<AppShell>();
+
+            var currentWindow =
+                Application.Current?.Windows.FirstOrDefault();
+
+            if (currentWindow is null)
+            {
+                throw new InvalidOperationException(
+                    "Uygulama penceresi bulunamadı.");
+            }
+
+            currentWindow.Page = appShell;
 
             // Ana sayfayı oluşturduğumuzda buradan yönlendireceğiz.
         }
