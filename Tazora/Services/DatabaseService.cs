@@ -410,6 +410,117 @@ public class DatabaseService
             .CountAsync();
     }
 
+    public async Task<int> AddProductToBasketAsync(int productId)
+    {
+        var database = await GetDatabaseAsync();
+
+        var product = await database
+            .Table<Product>()
+            .Where(item =>
+                item.Id == productId &&
+                item.IsActive)
+            .FirstOrDefaultAsync();
+
+        if (product is null)
+        {
+            throw new InvalidOperationException(
+                "Sepete eklenecek ürün bulunamadı.");
+        }
+
+        var basketItem = await database
+            .Table<BasketItem>()
+            .Where(item => item.ProductId == productId)
+            .FirstOrDefaultAsync();
+
+        if (basketItem is null)
+        {
+            basketItem = new BasketItem
+            {
+                ProductId = productId,
+                Quantity = 1,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await database.InsertAsync(basketItem);
+
+            return basketItem.Quantity;
+        }
+
+        if (basketItem.Quantity >= 99)
+        {
+            return basketItem.Quantity;
+        }
+
+        basketItem.Quantity++;
+        basketItem.UpdatedAt = DateTime.UtcNow;
+
+        await database.UpdateAsync(basketItem);
+
+        return basketItem.Quantity;
+    }
+
+    public async Task<List<BasketItem>> GetBasketItemsAsync()
+    {
+        var database = await GetDatabaseAsync();
+
+        return await database
+            .Table<BasketItem>()
+            .Where(item => item.Quantity > 0)
+            .OrderByDescending(item => item.UpdatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<int> UpdateBasketQuantityAsync(
+        int productId,
+        int quantity)
+    {
+        var database = await GetDatabaseAsync();
+
+        var basketItem = await database
+            .Table<BasketItem>()
+            .Where(item => item.ProductId == productId)
+            .FirstOrDefaultAsync();
+
+        if (basketItem is null)
+            return 0;
+
+        if (quantity <= 0)
+        {
+            await database.DeleteAsync(basketItem);
+            return 0;
+        }
+
+        basketItem.Quantity = Math.Min(quantity, 99);
+        basketItem.UpdatedAt = DateTime.UtcNow;
+
+        await database.UpdateAsync(basketItem);
+
+        return basketItem.Quantity;
+    }
+
+    public async Task RemoveProductFromBasketAsync(
+        int productId)
+    {
+        var database = await GetDatabaseAsync();
+
+        var basketItem = await database
+            .Table<BasketItem>()
+            .Where(item => item.ProductId == productId)
+            .FirstOrDefaultAsync();
+
+        if (basketItem is not null)
+        {
+            await database.DeleteAsync(basketItem);
+        }
+    }
+
+    public async Task ClearBasketAsync()
+    {
+        var database = await GetDatabaseAsync();
+
+        await database.DeleteAllAsync<BasketItem>();
+    }
     public async Task<bool> IsEmailRegisteredAsync(string email)
     {
         var database = await GetDatabaseAsync();
@@ -548,5 +659,141 @@ public class DatabaseService
             File.Create(destinationPath);
 
         await sourceStream.CopyToAsync(destinationStream);
+    }
+
+    public async Task<int> CreateOrderFromBasketAsync(
+    int userId)
+    {
+        if (userId <= 0)
+        {
+            throw new InvalidOperationException(
+                "Sipariş oluşturmak için kullanıcı girişi gereklidir.");
+        }
+
+        var database = await GetDatabaseAsync();
+        var createdOrderId = 0;
+
+        await database.RunInTransactionAsync(connection =>
+        {
+            var basketItems = connection
+                .Table<BasketItem>()
+                .Where(item => item.Quantity > 0)
+                .ToList();
+
+            if (basketItems.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    "Sepette sipariş oluşturulacak ürün bulunmuyor.");
+            }
+
+            var currentDate = DateTime.UtcNow;
+
+            var activeDiscounts = connection
+                .Table<Discount>()
+                .Where(discount =>
+                    discount.IsActive &&
+                    discount.StartDate <= currentDate &&
+                    discount.EndDate >= currentDate)
+                .ToList();
+
+            var discountsByProductId = activeDiscounts
+                .Where(discount => discount.ProductId.HasValue)
+                .GroupBy(discount => discount.ProductId!.Value)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group
+                        .OrderByDescending(item => item.DiscountRate)
+                        .First());
+
+            var orderLines = new List<OrderItem>();
+
+            decimal subtotal = 0;
+            decimal discountAmount = 0;
+
+            foreach (var basketItem in basketItems)
+            {
+                var product = connection
+                    .Table<Product>()
+                    .FirstOrDefault(item =>
+                        item.Id == basketItem.ProductId &&
+                        item.IsActive);
+
+                if (product is null)
+                    continue;
+
+                var originalLineTotal =
+                    product.Price * basketItem.Quantity;
+
+                var discountRate =
+                    discountsByProductId.TryGetValue(
+                        product.Id,
+                        out var discount)
+                        ? discount.DiscountRate
+                        : 0;
+
+                var unitPrice = discountRate > 0
+                    ? Math.Round(
+                        product.Price *
+                        (100 - discountRate) / 100,
+                        2)
+                    : product.Price;
+
+                var lineTotal =
+                    unitPrice * basketItem.Quantity;
+
+                subtotal += originalLineTotal;
+                discountAmount +=
+                    originalLineTotal - lineTotal;
+
+                orderLines.Add(new OrderItem
+                {
+                    ProductId = product.Id,
+                    ProductName = product.Name,
+                    UnitPrice = unitPrice,
+                    Quantity = basketItem.Quantity,
+                    TotalPrice = lineTotal
+                });
+            }
+
+            if (orderLines.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    "Sipariş oluşturulabilecek aktif ürün bulunamadı.");
+            }
+
+            var discountedSubtotal =
+                subtotal - discountAmount;
+
+            var deliveryFee =
+                discountedSubtotal >= 300m
+                    ? 0
+                    : 19.90m;
+
+            var order = new CustomerOrder
+            {
+                UserId = userId,
+                OrderDate = currentDate,
+                Subtotal = subtotal,
+                DiscountAmount = discountAmount,
+                DeliveryFee = deliveryFee,
+                TotalAmount =
+                    discountedSubtotal + deliveryFee,
+                Status = OrderStatus.Preparing
+            };
+
+            connection.Insert(order);
+
+            foreach (var orderLine in orderLines)
+            {
+                orderLine.OrderId = order.Id;
+                connection.Insert(orderLine);
+            }
+
+            connection.DeleteAll<BasketItem>();
+
+            createdOrderId = order.Id;
+        });
+
+        return createdOrderId;
     }
 }

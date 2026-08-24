@@ -92,6 +92,8 @@
             <CollectionView
                 x:Name="CategoriesCollectionView"
                 Margin="20,4,20,16"
+                SelectionMode="Single"
+                SelectionChanged="OnCategorySelectionChanged"
                 VerticalScrollBarVisibility="Never">
 
                 <CollectionView.ItemsLayout>

@@ -87,4 +87,23 @@ public partial class CategoriesPage : ContentPage
         CategoryCountLabel.Text =
             $"{filteredCategories.Count} kategori bulundu";
     }
+
+    private async void OnCategorySelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault()
+            is not Category selectedCategory)
+        {
+            return;
+        }
+
+        CategoriesCollectionView.SelectedItem = null;
+
+        var categoryName =
+            Uri.EscapeDataString(selectedCategory.Name);
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(ProductListPage)}" +
+            $"?categoryId={selectedCategory.Id}" +
+            $"&categoryName={categoryName}");
+    }
 }

@@ -8,6 +8,7 @@ public partial class AppShell : Shell
     public AppShell(IServiceProvider serviceProvider)
     {
         InitializeComponent();
+        Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
 
         HomeShellContent.Content =
             serviceProvider.GetRequiredService<HomePage>();
