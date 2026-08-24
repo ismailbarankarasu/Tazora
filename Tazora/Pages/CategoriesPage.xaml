@@ -4,28 +4,222 @@
     x:Class="Tazora.Pages.CategoriesPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
     xmlns:controls="clr-namespace:Tazora.Controls"
-    Shell.TabBarIsVisible="False"
     BackgroundColor="{StaticResource TazoraBackground}"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
 
-    <Grid RowDefinitions="*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
 
-        <!-- Mevcut kategori sayfası içeriği -->
-        <Grid Grid.Row="0">
+        <!-- Başlık -->
+        <Grid
+            Grid.Row="0"
+            Padding="20,22,20,10"
+            ColumnDefinitions="*,Auto">
+
+            <VerticalStackLayout Spacing="3">
+
+                <Label
+                    Text="Kategoriler"
+                    Style="{StaticResource TazoraPageTitleLabel}" />
+
+                <Label
+                    Text="İhtiyacın olan ürünleri keşfet"
+                    Style="{StaticResource TazoraSecondaryLabel}"
+                    FontSize="14" />
+
+            </VerticalStackLayout>
 
             <Label
-            Text="Kategoriler"
-            Style="{StaticResource TazoraPageTitleLabel}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+                Grid.Column="1"
+                Text="{x:Static helpers:IconFont.Categories}"
+                FontFamily="MaterialSymbols"
+                FontSize="30"
+                TextColor="{StaticResource TazoraPrimary}"
+                VerticalOptions="Center" />
 
         </Grid>
 
+        <!-- Arama kutusu -->
+        <Border
+            Grid.Row="1"
+            HeightRequest="54"
+            Margin="20,12,20,0"
+            Padding="15,0"
+            BackgroundColor="{StaticResource TazoraSurface}"
+            Stroke="{StaticResource TazoraBorder}">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="16" />
+            </Border.StrokeShape>
+
+            <Grid ColumnDefinitions="34,*">
+
+                <Label
+                    Text="{x:Static helpers:IconFont.Search}"
+                    FontFamily="MaterialSymbols"
+                    FontSize="23"
+                    TextColor="{StaticResource TazoraTextSecondary}"
+                    VerticalTextAlignment="Center" />
+
+                <Entry
+                    Grid.Column="1"
+                    Placeholder="Kategori ara"
+                    FontFamily="InterRegular"
+                    FontSize="14"
+                    TextColor="{StaticResource TazoraTextPrimary}"
+                    PlaceholderColor="{StaticResource TazoraTextMuted}"
+                    BackgroundColor="Transparent"
+                    TextChanged="OnSearchTextChanged" />
+
+            </Grid>
+        </Border>
+
+        <!-- Kategori sayısı -->
+        <Label
+            x:Name="CategoryCountLabel"
+            Grid.Row="2"
+            Text="Kategoriler yükleniyor..."
+            Margin="20,16,20,10"
+            FontFamily="InterRegular"
+            FontSize="13"
+            TextColor="{StaticResource TazoraTextSecondary}" />
+
+        <!-- Liste alanı -->
+        <Grid Grid.Row="3">
+
+            <CollectionView
+                x:Name="CategoriesCollectionView"
+                Margin="20,4,20,16"
+                VerticalScrollBarVisibility="Never">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        Orientation="Vertical"
+                        Span="2"
+                        HorizontalItemSpacing="14"
+                        VerticalItemSpacing="14" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout
+                        Padding="20"
+                        Spacing="8"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="{x:Static helpers:IconFont.Search}"
+                            FontFamily="MaterialSymbols"
+                            FontSize="42"
+                            TextColor="{StaticResource TazoraTextMuted}"
+                            HorizontalOptions="Center" />
+
+                        <Label
+                            Text="Kategori bulunamadı"
+                            FontFamily="InterBold"
+                            FontSize="15"
+                            TextColor="{StaticResource TazoraTextSecondary}"
+                            HorizontalOptions="Center" />
+
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Border
+                            HeightRequest="178"
+                            Padding="14"
+                            BackgroundColor="{StaticResource TazoraSurface}"
+                            Stroke="{StaticResource TazoraDivider}">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout
+                                Spacing="10"
+                                VerticalOptions="Center">
+
+                                <Border
+                                    WidthRequest="82"
+                                    HeightRequest="82"
+                                    Padding="0"
+                                    HorizontalOptions="Center"
+                                    BackgroundColor="{StaticResource TazoraPrimarySoft}"
+                                    StrokeThickness="0">
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="41" />
+                                    </Border.StrokeShape>
+
+                                    <Label
+                                        Text="{Binding IconCode}"
+                                        FontFamily="MaterialSymbols"
+                                        FontSize="34"
+                                        TextColor="{StaticResource TazoraPrimary}"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center" />
+
+                                </Border>
+
+                                <Label
+                                    Text="{Binding Name}"
+                                    FontFamily="InterBold"
+                                    FontSize="14"
+                                    TextColor="{StaticResource TazoraTextPrimary}"
+                                    HorizontalTextAlignment="Center"
+                                    MaxLines="2" />
+
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Yükleniyor -->
+            <ActivityIndicator
+                x:Name="CategoryLoadingIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                Color="{StaticResource TazoraPrimary}"
+                WidthRequest="42"
+                HeightRequest="42"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+
+            <!-- Hata -->
+            <Border
+                x:Name="CategoryErrorBorder"
+                IsVisible="False"
+                Margin="20"
+                Padding="16"
+                BackgroundColor="#FDECEC"
+                Stroke="{StaticResource TazoraError}"
+                VerticalOptions="Start">
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="14" />
+                </Border.StrokeShape>
+
+                <Label
+                    Text="Kategoriler yüklenemedi. Lütfen tekrar dene."
+                    FontFamily="InterRegular"
+                    FontSize="13"
+                    TextColor="{StaticResource TazoraError}" />
+
+            </Border>
+
+        </Grid>
+
+        <!-- Alt navigasyon -->
         <controls:BottomNavigationBar
-        Grid.Row="1"
-        ActiveTab="Categories"
-        HorizontalOptions="Fill" />
+            Grid.Row="4"
+            ActiveTab="Categories"
+            HorizontalOptions="Fill" />
 
     </Grid>
 </ContentPage>
