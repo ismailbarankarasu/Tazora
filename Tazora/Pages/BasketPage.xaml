@@ -4,15 +4,28 @@
     x:Class="Tazora.Pages.BasketPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Tazora.Controls"
+    Shell.TabBarIsVisible="False"
     BackgroundColor="{StaticResource TazoraBackground}"
     Shell.NavBarIsVisible="False">
 
-    <Grid>
-        <Label
+    <Grid RowDefinitions="*,Auto">
+
+        <Grid Grid.Row="0">
+            <!-- Mevcut sepet içeriği -->
+
+            <Label
             Text="Sepetim"
             Style="{StaticResource TazoraPageTitleLabel}"
             HorizontalOptions="Center"
             VerticalOptions="Center" />
+        </Grid>
+
+        <controls:BottomNavigationBar
+        Grid.Row="1"
+        ActiveTab="Basket"
+        HorizontalOptions="Fill" />
+
     </Grid>
 
 </ContentPage>

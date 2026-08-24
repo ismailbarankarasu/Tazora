@@ -24,17 +24,17 @@
                 </VerticalStackLayout.GestureRecognizers>
 
                 <Label
+                    x:Name="HomeIconLabel"
                     Text="{x:Static helpers:IconFont.Home}"
                     FontFamily="MaterialSymbols"
                     FontSize="25"
-                    TextColor="{StaticResource TazoraPrimary}"
                     HorizontalOptions="Center" />
 
                 <Label
+                    x:Name="HomeTextLabel"
                     Text="Ana Sayfa"
                     FontFamily="InterBold"
-                    FontSize="11"
-                    TextColor="{StaticResource TazoraPrimary}" />
+                    FontSize="11"/>
 
             </VerticalStackLayout>
 
@@ -48,17 +48,17 @@
                 </VerticalStackLayout.GestureRecognizers>
 
                 <Label
+                    x:Name="CategoriesIconLabel"
                     Text="{x:Static helpers:IconFont.Categories}"
                     FontFamily="MaterialSymbols"
                     FontSize="25"
-                    TextColor="{StaticResource TazoraTextSecondary}"
                     HorizontalOptions="Center" />
 
                 <Label
+                    x:Name="CategoriesTextLabel"
                     Text="Kategoriler"
                     FontFamily="InterRegular"
-                    FontSize="11"
-                    TextColor="{StaticResource TazoraTextSecondary}" />
+                    FontSize="11"/>
 
             </VerticalStackLayout>
 
@@ -72,17 +72,17 @@
                 </VerticalStackLayout.GestureRecognizers>
 
                 <Label
+                    x:Name="BasketIconLabel"
                     Text="{x:Static helpers:IconFont.ShoppingCart}"
                     FontFamily="MaterialSymbols"
                     FontSize="25"
-                    TextColor="{StaticResource TazoraTextSecondary}"
                     HorizontalOptions="Center" />
 
                 <Label
+                    x:Name="BasketTextLabel"
                     Text="Sepet"
                     FontFamily="InterRegular"
-                    FontSize="11"
-                    TextColor="{StaticResource TazoraTextSecondary}" />
+                    FontSize="11"/>
 
             </VerticalStackLayout>
 
@@ -96,17 +96,17 @@
                 </VerticalStackLayout.GestureRecognizers>
 
                 <Label
+                    x:Name="ProfileIconLabel"
                     Text="{x:Static helpers:IconFont.Person}"
                     FontFamily="MaterialSymbols"
                     FontSize="25"
-                    TextColor="{StaticResource TazoraTextSecondary}"
                     HorizontalOptions="Center" />
 
                 <Label
+                    x:Name="ProfileTextLabel"
                     Text="Profil"
                     FontFamily="InterRegular"
-                    FontSize="11"
-                    TextColor="{StaticResource TazoraTextSecondary}" />
+                    FontSize="11"/>
 
             </VerticalStackLayout>
 

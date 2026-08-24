@@ -328,8 +328,8 @@
         </VerticalStackLayout>
     </ScrollView>
         <controls:BottomNavigationBar
-        Grid.Row="1"
-        HorizontalOptions="Fill" />
-
+            Grid.Row="1"
+            ActiveTab="Home"
+            HorizontalOptions="Fill" />
     </Grid>
 </ContentPage>
