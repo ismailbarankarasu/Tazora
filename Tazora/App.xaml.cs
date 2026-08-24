@@ -3,24 +3,22 @@ using Tazora.Pages;
 
 namespace Tazora;
 
-public partial class App : Application
+public partial class AppShell : Shell
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public App(IServiceProvider serviceProvider)
+    public AppShell(IServiceProvider serviceProvider)
     {
         InitializeComponent();
 
-        _serviceProvider = serviceProvider;
-    }
+        HomeShellContent.Content =
+            serviceProvider.GetRequiredService<HomePage>();
 
-    protected override Window CreateWindow(
-        IActivationState? activationState)
-    {
-        var loginPage =
-            _serviceProvider.GetRequiredService<LoginPage>();
+        CategoriesShellContent.Content =
+            serviceProvider.GetRequiredService<CategoriesPage>();
 
-        return new Window(
-            new NavigationPage(loginPage));
+        BasketShellContent.Content =
+            serviceProvider.GetRequiredService<BasketPage>();
+
+        ProfileShellContent.Content =
+            serviceProvider.GetRequiredService<ProfilePage>();
     }
 }
