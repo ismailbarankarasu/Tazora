@@ -410,8 +410,9 @@ public class DatabaseService
             .CountAsync();
     }
 
-    public async Task<int> AddProductToBasketAsync(int productId)
+    public async Task<int> AddProductToBasketAsync(int productId, int quantityToAdd = 1)
     {
+        quantityToAdd = Math.Clamp(quantityToAdd, 1, 99);
         var database = await GetDatabaseAsync();
 
         var product = await database
@@ -437,7 +438,7 @@ public class DatabaseService
             basketItem = new BasketItem
             {
                 ProductId = productId,
-                Quantity = 1,
+                Quantity = quantityToAdd,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -452,7 +453,7 @@ public class DatabaseService
             return basketItem.Quantity;
         }
 
-        basketItem.Quantity++;
+        basketItem.Quantity = Math.Min(basketItem.Quantity + quantityToAdd, 99);
         basketItem.UpdatedAt = DateTime.UtcNow;
 
         await database.UpdateAsync(basketItem);
@@ -795,5 +796,43 @@ public class DatabaseService
         });
 
         return createdOrderId;
+    }
+
+    public async Task<List<CustomerOrder>> GetOrdersByUserAsync(
+    int userId)
+    {
+        var database = await GetDatabaseAsync();
+
+        return await database
+            .Table<CustomerOrder>()
+            .Where(order => order.UserId == userId)
+            .OrderByDescending(order => order.OrderDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<OrderItem>> GetOrderItemsByOrderIdAsync(
+        int orderId)
+    {
+        var database = await GetDatabaseAsync();
+
+        return await database
+            .Table<OrderItem>()
+            .Where(item => item.OrderId == orderId)
+            .OrderBy(item => item.Id)
+            .ToListAsync();
+    }
+
+    public async Task<CustomerOrder?> GetOrderByIdAsync(
+    int orderId,
+    int userId)
+    {
+        var database = await GetDatabaseAsync();
+
+        return await database
+            .Table<CustomerOrder>()
+            .Where(order =>
+                order.Id == orderId &&
+                order.UserId == userId)
+            .FirstOrDefaultAsync();
     }
 }

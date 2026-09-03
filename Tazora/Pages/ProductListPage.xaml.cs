@@ -207,4 +207,21 @@ public partial class ProductListPage
             button.IsEnabled = true;
         }
     }
+
+    private async void OnProductSelectionChanged(
+    object sender,
+    SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault()
+            is not HomeProductItem selectedProduct)
+        {
+            return;
+        }
+
+        ProductsCollectionView.SelectedItem = null;
+
+        await Shell.Current.GoToAsync(
+            $"{nameof(ProductDetailPage)}" +
+            $"?productId={selectedProduct.Id}");
+    }
 }

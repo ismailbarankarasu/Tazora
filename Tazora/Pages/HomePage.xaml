@@ -10,323 +10,395 @@
     Shell.TabBarIsVisible="False">
 
     <Grid RowDefinitions="*,Auto">
-    <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="20,18,20,32" Spacing="0">
+        <ScrollView Grid.Row="0" VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="20,18,20,32" Spacing="0">
 
-            <!-- Address -->
-            <Grid ColumnDefinitions="*,48">
-                <VerticalStackLayout Spacing="2">
-                    <Label Text="Teslimat Adresi"
+                <!-- Address -->
+                <Grid ColumnDefinitions="*,48">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Teslimat Adresi"
                            Style="{StaticResource TazoraCaptionLabel}" />
-                    <HorizontalStackLayout Spacing="5">
-                        <Label Text="{x:Static helpers:IconFont.Location}"
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="{x:Static helpers:IconFont.Location}"
                                FontFamily="MaterialSymbols"
                                FontSize="20"
                                TextColor="{StaticResource TazoraPrimary}" />
-                        <Label Text="Ev • Nilüfer, Bursa"
+                            <Label Text="Ev • Nilüfer, Bursa"
                                FontFamily="InterBold"
                                FontSize="15"
                                TextColor="{StaticResource TazoraTextPrimary}" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
 
-                <Border Grid.Column="1"
+                    <Border Grid.Column="1"
                         WidthRequest="44"
                         HeightRequest="44"
                         Padding="0"
                         Stroke="{StaticResource TazoraDivider}"
                         BackgroundColor="{StaticResource TazoraSurface}">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="14" />
-                    </Border.StrokeShape>
-                    <Label Text="{x:Static helpers:IconFont.Notifications}"
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+                        <Label Text="{x:Static helpers:IconFont.Notifications}"
                            Style="{StaticResource TazoraIconLabel}" />
-                </Border>
-            </Grid>
+                    </Border>
+                </Grid>
 
-            <!-- Greeting -->
-            <Label x:Name="GreetingLabel"
+                <!-- Greeting -->
+                <Label x:Name="GreetingLabel"
                    Text="Merhaba 👋"
                    Style="{StaticResource TazoraPageTitleLabel}"
                    Margin="0,30,0,0" />
-            <Label Text="Bugün neye ihtiyacın var?"
+                <Label Text="Bugün neye ihtiyacın var?"
                    Style="{StaticResource TazoraSecondaryLabel}"
                    FontSize="16"
                    Margin="0,4,0,0" />
 
-            <!-- Search -->
-            <Border HeightRequest="56"
+                <!-- Search -->
+                <Border HeightRequest="56"
                     Margin="0,22,0,0"
                     Padding="16,0"
                     BackgroundColor="{StaticResource TazoraSurface}"
                     Stroke="{StaticResource TazoraBorder}">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="16" />
-                </Border.StrokeShape>
-                <Grid ColumnDefinitions="38,*">
-                    <Label Text="{x:Static helpers:IconFont.Search}"
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="38,*">
+                        <Label Text="{x:Static helpers:IconFont.Search}"
                            Style="{StaticResource TazoraIconLabel}"
                            TextColor="{StaticResource TazoraTextSecondary}" />
-                    <Label Grid.Column="1"
+                        <Label Grid.Column="1"
                            Text="Ürün, kategori veya marka ara"
                            FontFamily="InterRegular"
                            FontSize="14"
                            TextColor="{StaticResource TazoraTextMuted}"
                            VerticalTextAlignment="Center" />
-                </Grid>
-            </Border>
-
-            <!-- Campaign -->
-            <Border HeightRequest="158"
+                    </Grid>
+                </Border>
+                <!-- Campaign -->
+                <Border
+                    HeightRequest="170"
                     Margin="0,24,0,0"
-                    Padding="20"
+                    Padding="0"
                     StrokeThickness="0"
                     BackgroundColor="{StaticResource TazoraPrimary}">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
-                </Border.StrokeShape>
-                <Grid ColumnDefinitions="*,100">
-                    <VerticalStackLayout VerticalOptions="Center" Spacing="7">
-                        <Border Padding="10,5"
-                                HorizontalOptions="Start"
-                                StrokeThickness="0"
-                                BackgroundColor="#36A568">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="10" />
-                            </Border.StrokeShape>
-                            <Label Text="%30 İndirim"
-                                   FontFamily="InterBold"
-                                   FontSize="12"
-                                   TextColor="White" />
-                        </Border>
-                        <Label Text="İlk Siparişine Özel"
-                               FontFamily="InterBold"
-                               FontSize="21"
-                               TextColor="White" />
-                        <Label Text="Seçili ürünlerde avantajlı fiyatları keşfet."
-                               FontFamily="InterRegular"
-                               FontSize="12"
-                               TextColor="#DDF5E6" />
-                    </VerticalStackLayout>
-                    <Label Grid.Column="1"
-                           Text="{x:Static helpers:IconFont.ShoppingBag}"
-                           FontFamily="MaterialSymbols"
-                           FontSize="78"
-                           TextColor="#55B77D"
-                           HorizontalTextAlignment="Center"
-                           VerticalTextAlignment="Center" />
-                </Grid>
-            </Border>
 
-            <!-- Loading -->
-            <ActivityIndicator x:Name="CategoryLoadingIndicator"
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <Grid>
+
+                        <!-- Arka plan görseli -->
+                        <Image
+                            Source="campaign_first_order.jpg"
+                            Aspect="AspectFill"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill" />
+
+                        <!-- Görselin üzerindeki koyu katman -->
+                        <BoxView
+                            Color="#075F31"
+                            Opacity="0.72"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill" />
+
+                        <!-- Kampanya içeriği -->
+                        <Grid
+            Padding="20"
+            ColumnDefinitions="*,90">
+
+                            <VerticalStackLayout
+                Grid.Column="0"
+                VerticalOptions="Center"
+                Spacing="7">
+
+                                <Border
+                    Padding="10,5"
+                    HorizontalOptions="Start"
+                    StrokeThickness="0"
+                    BackgroundColor="#36A568">
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+
+                                    <Label
+                        Text="%30 İndirim"
+                        FontFamily="InterBold"
+                        FontSize="12"
+                        TextColor="White" />
+
+                                </Border>
+
+                                <Label
+                    Text="İlk Siparişine Özel"
+                    FontFamily="InterBold"
+                    FontSize="21"
+                    TextColor="White" />
+
+                                <Label
+                    Text="Seçili ürünlerde avantajlı fiyatları keşfet."
+                    FontFamily="InterRegular"
+                    FontSize="12"
+                    TextColor="#DDF5E6"
+                    MaxLines="2" />
+
+                            </VerticalStackLayout>
+
+                            <Label
+                Grid.Column="1"
+                Text="{x:Static helpers:IconFont.ShoppingBag}"
+                FontFamily="MaterialSymbols"
+                FontSize="67"
+                TextColor="#A5E5BD"
+                Opacity="0.85"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center" />
+
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Loading -->
+                <ActivityIndicator x:Name="CategoryLoadingIndicator"
                                IsVisible="False"
                                IsRunning="False"
                                HeightRequest="40"
                                Color="{StaticResource TazoraPrimary}"
                                Margin="0,18,0,0" />
 
-            <!-- Categories -->
-            <Grid Margin="0,28,0,0" ColumnDefinitions="*,Auto">
-                <Label Text="Kategoriler"
+                <!-- Categories -->
+                <Grid Margin="0,28,0,0" ColumnDefinitions="*,Auto">
+                    <Label Text="Kategoriler"
                        Style="{StaticResource TazoraSectionTitleLabel}" />
-                <Label Grid.Column="1"
+                    <Label Grid.Column="1"
                        Text="Tümünü Gör"
                        FontFamily="InterBold"
                        FontSize="13"
                        TextColor="{StaticResource TazoraPrimary}" />
-            </Grid>
+                </Grid>
 
-            <ScrollView Margin="-20,16,-20,0"
+                <ScrollView Margin="-20,16,-20,0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never">
-                <HorizontalStackLayout x:Name="CategoryContainer"
+                    <HorizontalStackLayout x:Name="CategoryContainer"
                                        Padding="20,0"
                                        Spacing="14">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <VerticalStackLayout WidthRequest="82" Spacing="8">
-                                <Border WidthRequest="72"
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout WidthRequest="82" Spacing="8">
+                                    <Border WidthRequest="72"
                                         HeightRequest="72"
                                         Padding="0"
                                         Stroke="{StaticResource TazoraDivider}"
                                         BackgroundColor="{StaticResource TazoraPrimarySoft}">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="36" />
-                                    </Border.StrokeShape>
-                                    <Label Text="{x:Static helpers:IconFont.Categories}"
-                                           FontFamily="MaterialSymbols"
-                                           FontSize="30"
-                                           TextColor="{StaticResource TazoraPrimary}"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center" />
-                                </Border>
-                                <Label Text="{Binding Name}"
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="36" />
+                                        </Border.StrokeShape>
+                                        <Image
+                                            Source="{Binding ImageName}"
+                                            Aspect="AspectFill"
+                                            HorizontalOptions="Fill"
+                                            VerticalOptions="Fill" />
+                                    </Border>
+                                    <Label Text="{Binding Name}"
                                        FontFamily="InterRegular"
                                        FontSize="12"
                                        TextColor="{StaticResource TazoraTextPrimary}"
                                        HorizontalTextAlignment="Center"
                                        MaxLines="2" />
-                            </VerticalStackLayout>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
-            </ScrollView>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </ScrollView>
 
-            <!-- Discounts -->
-            <Grid Margin="0,32,0,0" ColumnDefinitions="*,Auto">
-                <Label Text="Kaçırılmayacak Fırsatlar"
+                <!-- Discounts -->
+                <Grid Margin="0,32,0,0" ColumnDefinitions="*,Auto">
+                    <Label Text="Kaçırılmayacak Fırsatlar"
                        Style="{StaticResource TazoraSectionTitleLabel}" />
-                <Label Grid.Column="1"
-                       Text="Tümünü Gör"
-                       FontFamily="InterBold"
-                       FontSize="13"
-                       TextColor="{StaticResource TazoraPrimary}" />
-            </Grid>
+                    <Label
+                        Grid.Column="1"
+                        Text="Tümünü Gör"
+                        FontFamily="InterBold"
+                        FontSize="13"
+                        TextColor="{StaticResource TazoraPrimary}">
 
-            <ScrollView Margin="-20,16,-20,0"
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnDiscountsTapped" />
+                        </Label.GestureRecognizers>
+
+                    </Label>
+                </Grid>
+
+                <ScrollView Margin="-20,16,-20,0"
                         Orientation="Horizontal"
                         HorizontalScrollBarVisibility="Never">
-                <HorizontalStackLayout x:Name="DiscountedProductContainer"
+                    <HorizontalStackLayout x:Name="DiscountedProductContainer"
                                        Padding="20,0"
                                        Spacing="14">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Border WidthRequest="176"
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border WidthRequest="176"
                                     Padding="10"
                                     BackgroundColor="{StaticResource TazoraSurface}"
                                     Stroke="{StaticResource TazoraDivider}">
-                                <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="18" />
-                                </Border.StrokeShape>
-                                <VerticalStackLayout Spacing="7">
-                                    <Grid HeightRequest="125">
-                                        <Border StrokeThickness="0"
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="7">
+                                        <Grid HeightRequest="135">
+                                            <Border Padding="0"
+                                                StrokeThickness="0"
                                                 BackgroundColor="{StaticResource TazoraPrimarySoft}">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="14" />
-                                            </Border.StrokeShape>
-                                            <Label Text="{x:Static helpers:IconFont.ShoppingBag}"
-                                                   FontFamily="MaterialSymbols"
-                                                   FontSize="48"
-                                                   TextColor="{StaticResource TazoraPrimaryLight}"
-                                                   HorizontalTextAlignment="Center"
-                                                   VerticalTextAlignment="Center" />
-                                        </Border>
-                                        <Border IsVisible="{Binding HasDiscount}"
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="14" />
+                                                </Border.StrokeShape>
+                                                <Grid>
+
+                                                    <Label
+                                                        Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                                        FontFamily="MaterialSymbols"
+                                                        FontSize="48"
+                                                        TextColor="{StaticResource TazoraPrimaryLight}"
+                                                        HorizontalTextAlignment="Center"
+                                                        VerticalTextAlignment="Center" />
+
+                                                    <Image
+                                                        Source="{Binding ImageName}"
+                                                        Aspect="AspectFill"
+                                                        HorizontalOptions="Fill"
+                                                        VerticalOptions="Fill" />
+
+                                                </Grid>
+                                            </Border>
+                                            <Border IsVisible="{Binding HasDiscount}"
                                                 Padding="8,4"
                                                 Margin="7"
                                                 HorizontalOptions="Start"
                                                 VerticalOptions="Start"
                                                 StrokeThickness="0"
                                                 BackgroundColor="{StaticResource TazoraDiscount}">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="9" />
-                                            </Border.StrokeShape>
-                                            <Label Text="{Binding DiscountText}"
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="9" />
+                                                </Border.StrokeShape>
+                                                <Label Text="{Binding DiscountText}"
                                                    FontFamily="InterBold"
                                                    FontSize="11"
                                                    TextColor="White" />
-                                        </Border>
-                                    </Grid>
-                                    <Label Text="{Binding DiscountedPrice, StringFormat='{0:N2} TL'}"
+                                            </Border>
+                                        </Grid>
+                                        <Label Text="{Binding DiscountedPrice, StringFormat='{0:N2} TL'}"
                                            Style="{StaticResource TazoraPriceLabel}" />
-                                    <Label Text="{Binding Price, StringFormat='{0:N2} TL'}"
+                                        <Label Text="{Binding Price, StringFormat='{0:N2} TL'}"
                                            FontFamily="InterRegular"
                                            FontSize="11"
                                            TextDecorations="Strikethrough"
                                            TextColor="{StaticResource TazoraTextMuted}" />
-                                    <Label Text="{Binding Name}"
+                                        <Label Text="{Binding Name}"
                                            Style="{StaticResource TazoraCardTitleLabel}"
                                            FontSize="14" />
-                                    <Label Text="{Binding Unit}"
+                                        <Label Text="{Binding Unit}"
                                            Style="{StaticResource TazoraCaptionLabel}" />
-                                    <Button Text="+ Ekle"
+                                        <Button Text="+ Ekle"
                                             Style="{StaticResource TazoraAddButton}"
                                             HeightRequest="42" />
-                                </VerticalStackLayout>
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </HorizontalStackLayout>
-            </ScrollView>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </HorizontalStackLayout>
+                </ScrollView>
 
-            <!-- Popular products -->
-            <Grid Margin="0,34,0,0" ColumnDefinitions="*,Auto">
-                <Label Text="Popüler Ürünler"
+                <!-- Popular products -->
+                <Grid Margin="0,34,0,0" ColumnDefinitions="*,Auto">
+                    <Label Text="Popüler Ürünler"
                        Style="{StaticResource TazoraSectionTitleLabel}" />
-                <Label Grid.Column="1"
+                    <Label Grid.Column="1"
                        Text="Tümünü Gör"
                        FontFamily="InterBold"
                        FontSize="13"
                        TextColor="{StaticResource TazoraPrimary}" />
-            </Grid>
+                </Grid>
 
-            <FlexLayout x:Name="PopularProductContainer"
+                <FlexLayout x:Name="PopularProductContainer"
                         Margin="0,16,0,0"
                         Direction="Row"
                         Wrap="Wrap"
                         JustifyContent="SpaceBetween">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <Border FlexLayout.Basis="48%"
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border FlexLayout.Basis="48%"
                                 Margin="0,0,0,14"
                                 Padding="10"
                                 BackgroundColor="{StaticResource TazoraSurface}"
                                 Stroke="{StaticResource TazoraDivider}">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="18" />
-                            </Border.StrokeShape>
-                            <VerticalStackLayout Spacing="7">
-                                <Border HeightRequest="135"
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="18" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="7">
+                                    <Border HeightRequest="135"
+                                        Padding="0"
                                         StrokeThickness="0"
                                         BackgroundColor="{StaticResource TazoraPrimarySoft}">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="14" />
-                                    </Border.StrokeShape>
-                                    <Label Text="{x:Static helpers:IconFont.ShoppingBag}"
-                                           FontFamily="MaterialSymbols"
-                                           FontSize="50"
-                                           TextColor="{StaticResource TazoraPrimaryLight}"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center" />
-                                </Border>
-                                <Label Text="{Binding DiscountedPrice, StringFormat='{0:N2} TL'}"
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="14" />
+                                        </Border.StrokeShape>
+                                        <Grid>
+
+                                            <Label
+                                                Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                                FontFamily="MaterialSymbols"
+                                                FontSize="50"
+                                                TextColor="{StaticResource TazoraPrimaryLight}"
+                                                HorizontalTextAlignment="Center"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Image
+                                                Source="{Binding ImageName}"
+                                                Aspect="AspectFill"
+                                                HorizontalOptions="Fill"
+                                                VerticalOptions="Fill" />
+
+                                        </Grid>
+                                    </Border>
+                                    <Label Text="{Binding DiscountedPrice, StringFormat='{0:N2} TL'}"
                                        Style="{StaticResource TazoraPriceLabel}" />
-                                <Label Text="{Binding Name}"
+                                    <Label Text="{Binding Name}"
                                        Style="{StaticResource TazoraCardTitleLabel}"
                                        FontSize="14" />
-                                <Label Text="{Binding Unit}"
+                                    <Label Text="{Binding Unit}"
                                        Style="{StaticResource TazoraCaptionLabel}" />
-                                <Button Text="+ Ekle"
+                                    <Button Text="+ Ekle"
                                         Style="{StaticResource TazoraOutlinedButton}"
                                         HeightRequest="42"
                                         CornerRadius="14"
                                         FontSize="13" />
-                            </VerticalStackLayout>
-                        </Border>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </FlexLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
 
-            <!-- Error -->
-            <Border x:Name="CategoryErrorBorder"
+                <!-- Error -->
+                <Border x:Name="CategoryErrorBorder"
                     IsVisible="False"
                     Margin="0,20,0,0"
                     Padding="14"
                     Stroke="{StaticResource TazoraError}"
                     BackgroundColor="#FDECEC">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="12" />
-                </Border.StrokeShape>
-                <Label Text="Ana sayfa verileri yüklenemedi."
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Label Text="Ana sayfa verileri yüklenemedi."
                        FontFamily="InterRegular"
                        FontSize="13"
                        TextColor="{StaticResource TazoraError}" />
-            </Border>
+                </Border>
 
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
         <controls:BottomNavigationBar
             Grid.Row="1"
             ActiveTab="Home"

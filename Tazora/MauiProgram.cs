@@ -19,6 +19,11 @@ namespace Tazora
             builder.Services.AddTransient<BasketPage>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<ProductListPage>();
+            builder.Services.AddTransient<OrdersPage>();
+            builder.Services.AddTransient<OrderDetailPage>();
+            builder.Services.AddTransient<ProductDetailPage>();
+            builder.Services.AddTransient<DiscountsPage>();
+            builder.Services.AddTransient<StatisticsPage>();
             builder
                 .UseMauiApp<App>()
                     .ConfigureFonts(fonts =>

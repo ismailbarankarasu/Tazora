@@ -128,4 +128,12 @@ public partial class HomePage : ContentPage
             DiscountRate = discount?.DiscountRate ?? 0
         };
     }
+
+    private async void OnDiscountsTapped(
+    object sender,
+    TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync(
+            nameof(DiscountsPage));
+    }
 }

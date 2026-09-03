@@ -9,7 +9,11 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
         Routing.RegisterRoute(nameof(ProductListPage), typeof(ProductListPage));
-
+        Routing.RegisterRoute(nameof(OrdersPage), typeof(OrdersPage));
+        Routing.RegisterRoute(nameof(OrderDetailPage), typeof(OrderDetailPage));
+        Routing.RegisterRoute(nameof(ProductDetailPage), typeof(ProductDetailPage));
+        Routing.RegisterRoute(nameof(DiscountsPage), typeof(DiscountsPage));
+        Routing.RegisterRoute(nameof(StatisticsPage), typeof(StatisticsPage));
         HomeShellContent.Content =
             serviceProvider.GetRequiredService<HomePage>();
 

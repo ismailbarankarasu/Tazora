@@ -4,27 +4,318 @@
     x:Class="Tazora.Pages.ProfilePage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
     xmlns:controls="clr-namespace:Tazora.Controls"
-    Shell.TabBarIsVisible="False"
     BackgroundColor="{StaticResource TazoraBackground}"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
 
     <Grid RowDefinitions="*,Auto">
 
-        <Grid Grid.Row="0">
-            <!-- Mevcut profil içeriği -->
+        <ScrollView
+            Grid.Row="0"
+            VerticalScrollBarVisibility="Never">
 
-            <Label
-            Text="Profil"
-            Style="{StaticResource TazoraPageTitleLabel}"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
-        </Grid>
+            <VerticalStackLayout
+                Padding="20,20,20,28"
+                Spacing="18">
+
+                <!-- Başlık -->
+                <Grid ColumnDefinitions="*,Auto">
+
+                    <Label
+                        Text="Profilim"
+                        Style="{StaticResource TazoraPageTitleLabel}" />
+
+                    <Label
+                        Grid.Column="1"
+                        Text="{x:Static helpers:IconFont.Settings}"
+                        FontFamily="MaterialSymbols"
+                        FontSize="27"
+                        TextColor="{StaticResource TazoraPrimary}"
+                        VerticalTextAlignment="Center" />
+
+                </Grid>
+
+                <!-- Kullanıcı kartı -->
+                <Border
+                    Padding="20"
+                    BackgroundColor="{StaticResource TazoraSurface}"
+                    Stroke="{StaticResource TazoraDivider}">
+
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="22" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout
+                        Spacing="9"
+                        HorizontalOptions="Center">
+
+                        <Border
+                            WidthRequest="86"
+                            HeightRequest="86"
+                            Padding="0"
+                            BackgroundColor="{StaticResource TazoraPrimarySoft}"
+                            Stroke="{StaticResource TazoraPrimary}">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="43" />
+                            </Border.StrokeShape>
+
+                            <Label
+                                Text="{x:Static helpers:IconFont.Person}"
+                                FontFamily="MaterialSymbols"
+                                FontSize="43"
+                                TextColor="{StaticResource TazoraPrimary}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                        </Border>
+
+                        <Label
+                            x:Name="ProfileNameLabel"
+                            Text="Kullanıcı"
+                            FontFamily="InterBold"
+                            FontSize="21"
+                            TextColor="{StaticResource TazoraTextPrimary}"
+                            HorizontalTextAlignment="Center" />
+
+                        <Label
+                            x:Name="ProfileContactLabel"
+                            Text="kullanici@mail.com"
+                            FontFamily="InterRegular"
+                            FontSize="13"
+                            TextColor="{StaticResource TazoraTextSecondary}"
+                            HorizontalTextAlignment="Center" />
+
+                        <Button
+                            Text="Profili Düzenle"
+                            Margin="0,5,0,0"
+                            Padding="22,0"
+                            HeightRequest="42"
+                            CornerRadius="20"
+                            BackgroundColor="Transparent"
+                            BorderColor="{StaticResource TazoraPrimary}"
+                            BorderWidth="1"
+                            FontFamily="InterBold"
+                            FontSize="13"
+                            TextColor="{StaticResource TazoraPrimary}"
+                            Clicked="OnEditProfileClicked" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- İstatistikler -->
+                <Grid
+                    ColumnDefinitions="*,*,*"
+                    ColumnSpacing="10">
+
+                    <Border
+                        Grid.Column="0"
+                        Padding="10,14"
+                        BackgroundColor="{StaticResource TazoraSurface}"
+                        Stroke="{StaticResource TazoraDivider}">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout
+                            Spacing="3"
+                            HorizontalOptions="Center">
+
+                            <Label
+                                Text="{x:Static helpers:IconFont.Receipt}"
+                                FontFamily="MaterialSymbols"
+                                FontSize="25"
+                                TextColor="{StaticResource TazoraPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                x:Name="OrderCountLabel"
+                                Text="0"
+                                FontFamily="InterBold"
+                                FontSize="18"
+                                TextColor="{StaticResource TazoraTextPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                Text="Sipariş"
+                                FontFamily="InterRegular"
+                                FontSize="11"
+                                TextColor="{StaticResource TazoraTextSecondary}" />
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border
+                        Grid.Column="1"
+                        Padding="10,14"
+                        BackgroundColor="{StaticResource TazoraSurface}"
+                        Stroke="{StaticResource TazoraDivider}">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout
+                            Spacing="3"
+                            HorizontalOptions="Center">
+
+                            <Label
+                                Text="{x:Static helpers:IconFont.ShoppingCart}"
+                                FontFamily="MaterialSymbols"
+                                FontSize="25"
+                                TextColor="{StaticResource TazoraPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                x:Name="BasketCountLabel"
+                                Text="0"
+                                FontFamily="InterBold"
+                                FontSize="18"
+                                TextColor="{StaticResource TazoraTextPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                Text="Sepet"
+                                FontFamily="InterRegular"
+                                FontSize="11"
+                                TextColor="{StaticResource TazoraTextSecondary}" />
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border
+                        Grid.Column="2"
+                        Padding="10,14"
+                        BackgroundColor="{StaticResource TazoraSurface}"
+                        Stroke="{StaticResource TazoraDivider}">
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout
+                            Spacing="3"
+                            HorizontalOptions="Center">
+
+                            <Label
+                                Text="{x:Static helpers:IconFont.LocalOffer}"
+                                FontFamily="MaterialSymbols"
+                                FontSize="25"
+                                TextColor="{StaticResource TazoraPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                x:Name="DiscountCountLabel"
+                                Text="0"
+                                FontFamily="InterBold"
+                                FontSize="18"
+                                TextColor="{StaticResource TazoraTextPrimary}"
+                                HorizontalOptions="Center" />
+
+                            <Label
+                                Text="İndirim"
+                                FontFamily="InterRegular"
+                                FontSize="11"
+                                TextColor="{StaticResource TazoraTextSecondary}" />
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+                <Label
+                    Text="Hesabım"
+                    Style="{StaticResource TazoraSectionTitleLabel}"
+                    Margin="0,4,0,0" />
+
+                <!-- Menü -->
+                <VerticalStackLayout
+                    x:Name="ProfileMenuContainer"
+                    Spacing="9">
+
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+
+                            <Border
+                                Padding="15"
+                                BackgroundColor="{StaticResource TazoraSurface}"
+                                Stroke="{StaticResource TazoraDivider}">
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="15" />
+                                </Border.StrokeShape>
+
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        CommandParameter="{Binding Key}"
+                                        Tapped="OnMenuItemTapped" />
+                                </Border.GestureRecognizers>
+
+                                <Grid ColumnDefinitions="40,*,Auto">
+
+                                    <Label
+                                        Text="{Binding Icon}"
+                                        FontFamily="MaterialSymbols"
+                                        FontSize="24"
+                                        TextColor="{StaticResource TazoraPrimary}"
+                                        VerticalTextAlignment="Center" />
+
+                                    <VerticalStackLayout
+                                        Grid.Column="1"
+                                        Spacing="2">
+
+                                        <Label
+                                            Text="{Binding Title}"
+                                            FontFamily="InterBold"
+                                            FontSize="14"
+                                            TextColor="{StaticResource TazoraTextPrimary}" />
+
+                                        <Label
+                                            Text="{Binding Subtitle}"
+                                            FontFamily="InterRegular"
+                                            FontSize="11"
+                                            TextColor="{StaticResource TazoraTextSecondary}" />
+
+                                    </VerticalStackLayout>
+
+                                    <Label
+                                        Grid.Column="2"
+                                        Text="{x:Static helpers:IconFont.ChevronRight}"
+                                        FontFamily="MaterialSymbols"
+                                        FontSize="23"
+                                        TextColor="{StaticResource TazoraTextMuted}"
+                                        VerticalTextAlignment="Center" />
+
+                                </Grid>
+                            </Border>
+
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- Çıkış -->
+                <Button
+                    Text="Çıkış Yap"
+                    HeightRequest="50"
+                    CornerRadius="16"
+                    BackgroundColor="#FDECEC"
+                    BorderColor="{StaticResource TazoraError}"
+                    BorderWidth="1"
+                    FontFamily="InterBold"
+                    FontSize="14"
+                    TextColor="{StaticResource TazoraError}"
+                    Clicked="OnLogoutClicked" />
+
+            </VerticalStackLayout>
+        </ScrollView>
 
         <controls:BottomNavigationBar
-        Grid.Row="1"
-        ActiveTab="Profile"
-        HorizontalOptions="Fill" />
+            Grid.Row="1"
+            ActiveTab="Profile"
+            HorizontalOptions="Fill" />
 
     </Grid>
 </ContentPage>

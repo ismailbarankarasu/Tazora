@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Tazora.Pages.OrdersPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
+    xmlns:controls="clr-namespace:Tazora.Controls"
+    BackgroundColor="{StaticResource TazoraBackground}"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Başlık -->
+        <Grid
+            Grid.Row="0"
+            Padding="18,20,18,14"
+            ColumnDefinitions="44,*,44">
+
+            <Label
+                Text="{x:Static helpers:IconFont.ArrowBack}"
+                FontFamily="MaterialSymbols"
+                FontSize="28"
+                TextColor="{StaticResource TazoraTextPrimary}"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center">
+
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label
+                Grid.Column="1"
+                Text="Siparişlerim"
+                FontFamily="InterBold"
+                FontSize="23"
+                TextColor="{StaticResource TazoraPrimary}"
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center" />
+
+        </Grid>
+
+        <!-- Sipariş listesi -->
+        <Grid Grid.Row="1">
+
+            <CollectionView
+                x:Name="OrdersCollectionView"
+                Margin="20,4,20,16"
+                SelectionMode="Single"
+                SelectionChanged="OnOrderSelectionChanged"
+                VerticalScrollBarVisibility="Never">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout
+                        Spacing="10"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Text="{x:Static helpers:IconFont.Receipt}"
+                            FontFamily="MaterialSymbols"
+                            FontSize="55"
+                            TextColor="{StaticResource TazoraTextMuted}"
+                            HorizontalOptions="Center" />
+
+                        <Label
+                            Text="Henüz siparişin yok"
+                            FontFamily="InterBold"
+                            FontSize="17"
+                            TextColor="{StaticResource TazoraTextPrimary}" />
+
+                        <Label
+                            Text="Siparişlerin burada görüntülenecek."
+                            FontFamily="InterRegular"
+                            FontSize="13"
+                            TextColor="{StaticResource TazoraTextSecondary}" />
+
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Border
+                            Margin="0,0,0,13"
+                            Padding="16"
+                            BackgroundColor="{StaticResource TazoraSurface}"
+                            Stroke="{StaticResource TazoraDivider}">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+
+                            <Grid
+                                RowDefinitions="Auto,Auto,Auto"
+                                ColumnDefinitions="*,Auto"
+                                RowSpacing="9">
+
+                                <Label
+                                    Text="{Binding OrderNumber}"
+                                    FontFamily="InterBold"
+                                    FontSize="16"
+                                    TextColor="{StaticResource TazoraTextPrimary}" />
+
+                                <Border
+                                    Grid.Column="1"
+                                    Padding="9,5"
+                                    BackgroundColor="{StaticResource TazoraPrimarySoft}"
+                                    StrokeThickness="0">
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+
+                                    <Label
+                                        Text="{Binding StatusText}"
+                                        FontFamily="InterBold"
+                                        FontSize="11"
+                                        TextColor="{StaticResource TazoraPrimary}" />
+
+                                </Border>
+
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding OrderDateText}"
+                                    FontFamily="InterRegular"
+                                    FontSize="12"
+                                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding ProductCountText}"
+                                    FontFamily="InterRegular"
+                                    FontSize="12"
+                                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+                                <Label
+                                    Grid.Row="2"
+                                    Text="{Binding TotalAmount, StringFormat='Toplam: {0:N2} TL'}"
+                                    FontFamily="InterBold"
+                                    FontSize="15"
+                                    TextColor="{StaticResource TazoraPrimary}" />
+
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Text="{x:Static helpers:IconFont.ChevronRight}"
+                                    FontFamily="MaterialSymbols"
+                                    FontSize="24"
+                                    TextColor="{StaticResource TazoraTextSecondary}" />
+
+                            </Grid>
+                        </Border>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <ActivityIndicator
+                x:Name="OrdersLoadingIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                WidthRequest="42"
+                HeightRequest="42"
+                Color="{StaticResource TazoraPrimary}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center" />
+
+        </Grid>
+
+        <controls:BottomNavigationBar
+            Grid.Row="2"
+            ActiveTab="Profile"
+            HorizontalOptions="Fill" />
+
+    </Grid>
+</ContentPage>

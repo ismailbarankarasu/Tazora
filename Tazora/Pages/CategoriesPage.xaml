@@ -157,13 +157,11 @@
                                         <RoundRectangle CornerRadius="41" />
                                     </Border.StrokeShape>
 
-                                    <Label
-                                        Text="{Binding IconCode}"
-                                        FontFamily="MaterialSymbols"
-                                        FontSize="34"
-                                        TextColor="{StaticResource TazoraPrimary}"
-                                        HorizontalTextAlignment="Center"
-                                        VerticalTextAlignment="Center" />
+                                    <Image
+                                        Source="{Binding ImageName}"
+                                        Aspect="AspectFill"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill" />
 
                                 </Border>
 
