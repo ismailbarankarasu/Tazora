@@ -463,18 +463,20 @@
 
                 </Grid>
 
-                <Grid
+                <FlexLayout
                     x:Name="PopularProductContainer"
                     Margin="0,16,0,0"
-                    ColumnDefinitions="*,*"
-                    ColumnSpacing="14"
-                    RowSpacing="14">
+                    Wrap="Wrap"
+                    Direction="Row"
+                    JustifyContent="SpaceBetween">
 
                     <BindableLayout.ItemTemplate>
 
                         <DataTemplate>
 
                             <Border
+                                FlexLayout.Basis="48%"
+                                Margin="0,0,0,14"
                                 Padding="10"
                                 BackgroundColor="{StaticResource TazoraSurface}"
                                 Stroke="{StaticResource TazoraDivider}">
@@ -578,7 +580,7 @@
 
                     </BindableLayout.ItemTemplate>
 
-                </Grid>
+                </FlexLayout>
                 <!-- Error -->
                 <Border
                     x:Name="CategoryErrorBorder"
