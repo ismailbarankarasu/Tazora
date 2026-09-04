@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Tazora.Pages.SpinWheelPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
+    BackgroundColor="{StaticResource TazoraPrimary}"
+    Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Grid
+            Grid.Row="0"
+            HeightRequest="60"
+            Padding="16,8"
+            ColumnDefinitions="48,*,48">
+
+            <Border
+                Grid.Column="0"
+                WidthRequest="40" HeightRequest="40"
+                StrokeThickness="0" BackgroundColor="#20FFFFFF">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Border.GestureRecognizers>
+                <Label
+                    Text="{x:Static helpers:IconFont.ArrowBack}"
+                    FontFamily="MaterialSymbols" FontSize="24" TextColor="White"
+                    HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+            <Label
+                Grid.Column="1"
+                Text="Fırsat Çarkı"
+                FontFamily="InterBold" FontSize="20" TextColor="White"
+                HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Body -->
+        <ScrollView Grid.Row="1" VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="24,10,24,30" Spacing="20" HorizontalOptions="Center">
+
+                <!-- Title & Description -->
+                <Label
+                    Text="Çarkı Çevir, İndirimi Kap! 🎁"
+                    FontFamily="InterBold" FontSize="22" TextColor="White"
+                    HorizontalTextAlignment="Center" />
+
+                <Label
+                    Text="Bugüne özel şanslı indirim kuponunu kazanmak için hemen çarkı çevir."
+                    FontFamily="InterRegular" FontSize="14" TextColor="#E0F2FE"
+                    HorizontalTextAlignment="Center" Margin="0,-10,0,10" />
+
+                <!-- 8 Parçalı Çark Alanı -->
+                <Grid HeightRequest="320" WidthRequest="320" HorizontalOptions="Center">
+
+                    <!-- Üst İbre / Ok -->
+                    <Label
+                        Text="▼"
+                        FontSize="32" TextColor="#FFD700"
+                        HorizontalOptions="Center" VerticalOptions="Start"
+                        TranslationY="-12" ZIndex="10" />
+
+                    <!-- Çark Görseliniz -->
+                    <Image
+                        x:Name="WheelImage"
+                        Source="wheel_graphic.png"
+                        WidthRequest="290" HeightRequest="290"
+                        HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    <!-- Orta Çevir Buton Rozeti -->
+                    <Border
+                        WidthRequest="70" HeightRequest="70"
+                        BackgroundColor="#FFD700" StrokeThickness="0"
+                        HorizontalOptions="Center" VerticalOptions="Center" ZIndex="5">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="35" />
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="#50000000" Offset="0,4" Radius="10" />
+                        </Border.Shadow>
+                        <Label
+                            Text="ÇEVİR"
+                            FontFamily="InterBold" FontSize="14" TextColor="#1E293B"
+                            HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+
+                <!-- Çevir Butonu -->
+                <Button
+                    x:Name="SpinButton"
+                    Text="Şansını Dene!"
+                    Clicked="OnSpinClicked"
+                    Style="{StaticResource TazoraPrimaryButton}"
+                    BackgroundColor="#FFD700" TextColor="#1E293B"
+                    FontFamily="InterBold" FontSize="16" HeightRequest="52"
+                    Margin="0,10,0,0" />
+
+                <!-- Ödül Kartı (Çark durduğunda görünür) -->
+                <Border
+                    x:Name="RewardCard"
+                    IsVisible="False"
+                    Padding="20"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    Margin="0,10,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label
+                            Text="🎉 TEBRİKLER!"
+                            FontFamily="InterBold" FontSize="18" TextColor="{StaticResource TazoraPrimary}"
+                            HorizontalTextAlignment="Center" />
+
+                        <Label
+                            x:Name="RewardTitleLabel"
+                            Text="Sepette %20 İndirim Kazandınız!"
+                            FontFamily="InterBold" FontSize="16" TextColor="{StaticResource TazoraTextPrimary}"
+                            HorizontalTextAlignment="Center" />
+
+                        <Border
+                            Padding="12,8" BackgroundColor="{StaticResource TazoraBackground}"
+                            Stroke="{StaticResource TazoraBorder}" StrokeThickness="1" Margin="0,6">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                                <Label
+                                    x:Name="CouponCodeLabel"
+                                    Text="TAZORA20"
+                                    FontFamily="InterBold" FontSize="18" TextColor="{StaticResource TazoraPrimary}" />
+                                <Label
+                                    Text="Kopyala"
+                                    FontFamily="InterBold" FontSize="12" TextColor="{StaticResource TazoraTextSecondary}"
+                                    VerticalTextAlignment="Center">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnCopyCouponTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Button
+                            Text="Alışverişe Başla"
+                            Clicked="OnStartShoppingClicked"
+                            Style="{StaticResource TazoraPrimaryButton}"
+                            HeightRequest="44" FontSize="13" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

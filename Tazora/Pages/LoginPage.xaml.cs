@@ -85,6 +85,7 @@ public partial class LoginPage : ContentPage
         }
         catch (Exception exception)
         {
+            System.Diagnostics.Debug.WriteLine($"GIRIS HATA DETAYI: {exception.Message}");
             System.Diagnostics.Debug.WriteLine(exception);
 
             LoginErrorLabel.Text =

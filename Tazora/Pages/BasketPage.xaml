@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <ContentPage
     x:Class="Tazora.Pages.BasketPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:helpers="clr-namespace:Tazora.Helpers"
     xmlns:controls="clr-namespace:Tazora.Controls"
+    xmlns:helpers="clr-namespace:Tazora.Helpers"
     BackgroundColor="{StaticResource TazoraBackground}"
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
@@ -19,32 +18,25 @@
             ColumnDefinitions="*,Auto">
 
             <VerticalStackLayout Spacing="2">
-
-                <Label
-                    Text="Sepetim"
-                    Style="{StaticResource TazoraPageTitleLabel}" />
-
+                <Label Text="Sepetim" Style="{StaticResource TazoraPageTitleLabel}" />
                 <Label
                     x:Name="BasketItemCountLabel"
-                    Text="0 ürün"
+                    FontSize="14"
                     Style="{StaticResource TazoraSecondaryLabel}"
-                    FontSize="14" />
-
+                    Text="0 ürün" />
             </VerticalStackLayout>
 
             <Label
                 Grid.Column="1"
-                Text="Sepeti Temizle"
                 FontFamily="InterBold"
                 FontSize="13"
+                Text="Sepeti Temizle"
                 TextColor="{StaticResource TazoraPrimary}"
                 VerticalTextAlignment="Center">
-
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnClearBasketTapped" />
                 </Label.GestureRecognizers>
             </Label>
-
         </Grid>
 
         <!-- Ücretsiz teslimat -->
@@ -61,64 +53,57 @@
             </Border.StrokeShape>
 
             <VerticalStackLayout Spacing="9">
-
                 <Label
                     x:Name="FreeDeliveryLabel"
-                    Text="Ücretsiz teslimat için sepetine ürün ekle"
                     FontFamily="InterBold"
                     FontSize="13"
+                    Text="Ücretsiz teslimat için sepetine ürün ekle"
                     TextColor="{StaticResource TazoraTextPrimary}" />
 
                 <ProgressBar
                     x:Name="FreeDeliveryProgressBar"
+                    BackgroundColor="{StaticResource TazoraDisabledBackground}"
                     Progress="0"
-                    ProgressColor="{StaticResource TazoraPrimary}"
-                    BackgroundColor="{StaticResource TazoraDisabledBackground}" />
-
+                    ProgressColor="{StaticResource TazoraPrimary}" />
             </VerticalStackLayout>
         </Border>
 
         <!-- Sepet listesi -->
         <Grid Grid.Row="2">
 
-            <CollectionView
-                x:Name="BasketCollectionView"
-                Margin="20,0,20,12"
-                VerticalScrollBarVisibility="Never">
+            <CollectionView x:Name="BasketCollectionView" Margin="20,0,20,12" VerticalScrollBarVisibility="Never">
 
                 <CollectionView.EmptyView>
                     <VerticalStackLayout
-                        Spacing="10"
                         HorizontalOptions="Center"
+                        Spacing="10"
                         VerticalOptions="Center">
 
                         <Label
-                            Text="{x:Static helpers:IconFont.ShoppingCart}"
                             FontFamily="MaterialSymbols"
                             FontSize="58"
-                            TextColor="{StaticResource TazoraTextMuted}"
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center"
+                            Text="{x:Static helpers:IconFont.ShoppingCart}"
+                            TextColor="{StaticResource TazoraTextMuted}" />
 
                         <Label
-                            Text="Sepetin henüz boş"
                             FontFamily="InterBold"
                             FontSize="18"
-                            TextColor="{StaticResource TazoraTextPrimary}"
-                            HorizontalOptions="Center" />
+                            HorizontalOptions="Center"
+                            Text="Sepetin henüz boş"
+                            TextColor="{StaticResource TazoraTextPrimary}" />
 
                         <Label
-                            Text="Beğendiğin ürünleri sepete ekleyebilirsin."
                             FontFamily="InterRegular"
                             FontSize="13"
-                            TextColor="{StaticResource TazoraTextSecondary}"
-                            HorizontalTextAlignment="Center" />
-
+                            HorizontalTextAlignment="Center"
+                            Text="Beğendiğin ürünleri sepete ekleyebilirsin."
+                            TextColor="{StaticResource TazoraTextSecondary}" />
                     </VerticalStackLayout>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-
                         <Border
                             Margin="0,0,0,12"
                             Padding="10"
@@ -131,10 +116,9 @@
 
                             <Grid
                                 ColumnDefinitions="92,*,Auto"
-                                RowDefinitions="Auto,Auto,Auto"
-                                ColumnSpacing="12">
+                                ColumnSpacing="12"
+                                RowDefinitions="Auto,Auto,Auto">
 
-                                <!-- Görsel -->
                                 <!-- Ürün görseli -->
                                 <Border
                                     Grid.RowSpan="3"
@@ -149,55 +133,52 @@
                                     </Border.StrokeShape>
 
                                     <Grid>
-
-                                        <!-- Görsel bulunamazsa gösterilecek ikon -->
                                         <Label
-                                            Text="{x:Static helpers:IconFont.ShoppingBag}"
                                             FontFamily="MaterialSymbols"
                                             FontSize="39"
-                                            TextColor="{StaticResource TazoraPrimaryLight}"
                                             HorizontalTextAlignment="Center"
+                                            Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                            TextColor="{StaticResource TazoraPrimaryLight}"
                                             VerticalTextAlignment="Center" />
 
-                                        <!-- SQLite’tan gelen gerçek ürün görseli -->
                                         <Image
-                                            Source="{Binding ImageName}"
                                             Aspect="AspectFill"
                                             HorizontalOptions="Fill"
+                                            Source="{Binding ImageName}"
                                             VerticalOptions="Fill" />
-
                                     </Grid>
                                 </Border>
+
                                 <!-- Ürün adı -->
                                 <Label
                                     Grid.Column="1"
-                                    Text="{Binding Name}"
                                     FontFamily="InterBold"
                                     FontSize="14"
-                                    TextColor="{StaticResource TazoraTextPrimary}"
-                                    MaxLines="2" />
+                                    MaxLines="2"
+                                    Text="{Binding Name}"
+                                    TextColor="{StaticResource TazoraTextPrimary}" />
 
                                 <!-- Sil -->
                                 <Button
                                     Grid.Column="2"
-                                    Text="{x:Static helpers:IconFont.Delete}"
-                                    FontFamily="MaterialSymbols"
-                                    FontSize="20"
                                     WidthRequest="38"
                                     HeightRequest="38"
                                     Padding="0"
                                     BackgroundColor="Transparent"
-                                    TextColor="{StaticResource TazoraTextSecondary}"
+                                    Clicked="OnRemoveClicked"
                                     CommandParameter="{Binding ProductId}"
-                                    Clicked="OnRemoveClicked" />
+                                    FontFamily="MaterialSymbols"
+                                    FontSize="20"
+                                    Text="{x:Static helpers:IconFont.Delete}"
+                                    TextColor="{StaticResource TazoraTextSecondary}" />
 
                                 <!-- Birim -->
                                 <Label
                                     Grid.Row="1"
                                     Grid.Column="1"
-                                    Text="{Binding Unit}"
                                     FontFamily="InterRegular"
                                     FontSize="12"
+                                    Text="{Binding Unit}"
                                     TextColor="{StaticResource TazoraTextSecondary}" />
 
                                 <!-- Fiyat ve miktar -->
@@ -209,66 +190,61 @@
                                     VerticalOptions="End">
 
                                     <Label
-                                        Text="{Binding LineTotal, StringFormat='{0:N2} TL'}"
                                         FontFamily="InterBold"
                                         FontSize="15"
+                                        Text="{Binding LineTotal, StringFormat='{0:N2} TL'}"
                                         TextColor="{StaticResource TazoraPrimary}"
                                         VerticalTextAlignment="Center" />
 
-                                    <HorizontalStackLayout
-                                        Grid.Column="1"
-                                        Spacing="5">
-
+                                    <HorizontalStackLayout Grid.Column="1" Spacing="5">
                                         <Button
-                                            Text="−"
                                             WidthRequest="36"
                                             HeightRequest="36"
                                             Padding="0"
-                                            CornerRadius="18"
                                             BackgroundColor="{StaticResource TazoraPrimarySoft}"
-                                            TextColor="{StaticResource TazoraPrimary}"
+                                            Clicked="OnDecreaseClicked"
                                             CommandParameter="{Binding ProductId}"
-                                            Clicked="OnDecreaseClicked" />
+                                            CornerRadius="18"
+                                            Text="−"
+                                            TextColor="{StaticResource TazoraPrimary}" />
 
                                         <Label
-                                            Text="{Binding Quantity}"
                                             WidthRequest="28"
                                             FontFamily="InterBold"
                                             FontSize="14"
-                                            TextColor="{StaticResource TazoraTextPrimary}"
                                             HorizontalTextAlignment="Center"
+                                            Text="{Binding Quantity}"
+                                            TextColor="{StaticResource TazoraTextPrimary}"
                                             VerticalTextAlignment="Center" />
 
                                         <Button
-                                            Text="+"
                                             WidthRequest="36"
                                             HeightRequest="36"
                                             Padding="0"
-                                            CornerRadius="18"
                                             BackgroundColor="{StaticResource TazoraPrimary}"
-                                            TextColor="White"
+                                            Clicked="OnIncreaseClicked"
                                             CommandParameter="{Binding ProductId}"
-                                            Clicked="OnIncreaseClicked" />
-
+                                            CornerRadius="18"
+                                            Text="+"
+                                            TextColor="White" />
                                     </HorizontalStackLayout>
                                 </Grid>
 
                             </Grid>
                         </Border>
-
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <ActivityIndicator
                 x:Name="BasketLoadingIndicator"
-                IsVisible="False"
-                IsRunning="False"
                 WidthRequest="42"
                 HeightRequest="42"
-                Color="{StaticResource TazoraPrimary}"
                 HorizontalOptions="Center"
-                VerticalOptions="Center" />
+                IsRunning="False"
+                IsVisible="False"
+                VerticalOptions="Center"
+                Color="{StaticResource TazoraPrimary}" />
 
         </Grid>
 
@@ -279,38 +255,117 @@
             BackgroundColor="{StaticResource TazoraSurface}"
             Stroke="{StaticResource TazoraDivider}">
 
-            <Grid
-                RowDefinitions="Auto,Auto"
-                ColumnDefinitions="*,Auto"
-                RowSpacing="10">
+            <VerticalStackLayout Spacing="12">
 
-                <VerticalStackLayout Spacing="1">
+                <!-- KUPON GİRİŞ ALANI -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <Border
+                        Padding="12,0"
+                        BackgroundColor="White"
+                        Stroke="{StaticResource TazoraDivider}"
+                        StrokeThickness="1">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
 
-                    <Label
-                        Text="Toplam"
-                        FontFamily="InterRegular"
-                        FontSize="12"
-                        TextColor="{StaticResource TazoraTextSecondary}" />
+                        <Entry
+                            x:Name="CouponEntry"
+                            BackgroundColor="Transparent"
+                            ClearButtonVisibility="WhileEditing"
+                            FontFamily="InterRegular"
+                            FontSize="13"
+                            HeightRequest="44"
+                            Placeholder="Kupon Kodu Girin"
+                            PlaceholderColor="{StaticResource TazoraTextMuted}"
+                            TextTransform="Uppercase"
+                            TextColor="{StaticResource TazoraTextPrimary}" />
+                    </Border>
 
-                    <Label
-                        x:Name="BasketTotalLabel"
-                        Text="0,00 TL"
+                    <Button
+                        x:Name="ApplyCouponButton"
+                        Grid.Column="1"
+                        Padding="16,0"
+                        BackgroundColor="{StaticResource TazoraPrimary}"
+                        Clicked="OnApplyCouponClicked"
+                        CornerRadius="12"
                         FontFamily="InterBold"
-                        FontSize="21"
-                        TextColor="{StaticResource TazoraTextPrimary}" />
+                        FontSize="13"
+                        HeightRequest="44"
+                        Text="Uygula"
+                        TextColor="White" />
+                </Grid>
 
-                </VerticalStackLayout>
+                <!-- KUPON İNDİRİM BİLGİ DETAYI (Varsayılan olarak gizli) -->
+                <Grid
+                    x:Name="CouponDiscountRow"
+                    ColumnDefinitions="*,Auto"
+                    IsVisible="False">
+                    <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                        <Label
+                            FontFamily="MaterialSymbols"
+                            FontSize="16"
+                            Text="{x:Static helpers:IconFont.LocalOffer}"
+                            TextColor="{StaticResource TazoraPrimary}" />
+                        <Label
+                            x:Name="CouponCodeLabel"
+                            FontFamily="InterBold"
+                            FontSize="13"
+                            Text="KUPON"
+                            TextColor="{StaticResource TazoraPrimary}" />
+                        <Label
+                            FontFamily="InterRegular"
+                            FontSize="12"
+                            Text="(İndirim Yapıldı)"
+                            TextColor="{StaticResource TazoraTextSecondary}" />
+                    </HorizontalStackLayout>
 
-                <Button
-                    x:Name="CheckoutButton"
-                    Grid.Column="1"
-                    Text="Siparişi Tamamla"
-                    Style="{StaticResource TazoraPrimaryButton}"
-                    Padding="22,0"
-                    HeightRequest="52"
-                    Clicked="OnCheckoutClicked" />
+                    <Label
+                        x:Name="CouponRemoveLabel"
+                        Grid.Column="1"
+                        FontFamily="InterBold"
+                        FontSize="12"
+                        Text="Kaldır"
+                        TextColor="{StaticResource TazoraError}"
+                        VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnRemoveCouponTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
 
-            </Grid>
+                <BoxView 
+                    HeightRequest="1" 
+                    Color="{StaticResource TazoraDivider}" 
+                    HorizontalOptions="Fill" />
+
+                <!-- TOPLAM BİLGİSİ VE TAMAMLA BUTONU -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="1">
+                        <Label
+                            FontFamily="InterRegular"
+                            FontSize="12"
+                            Text="Ödenecek Tutar"
+                            TextColor="{StaticResource TazoraTextSecondary}" />
+
+                        <Label
+                            x:Name="BasketTotalLabel"
+                            FontFamily="InterBold"
+                            FontSize="21"
+                            Text="0,00 TL"
+                            TextColor="{StaticResource TazoraTextPrimary}" />
+                    </VerticalStackLayout>
+
+                    <Button
+                        x:Name="CheckoutButton"
+                        Grid.Column="1"
+                        Padding="22,0"
+                        Clicked="OnCheckoutClicked"
+                        HeightRequest="52"
+                        Style="{StaticResource TazoraPrimaryButton}"
+                        Text="Siparişi Tamamla" />
+                </Grid>
+
+            </VerticalStackLayout>
         </Border>
 
         <controls:BottomNavigationBar

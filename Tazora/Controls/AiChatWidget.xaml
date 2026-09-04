@@ -6,9 +6,10 @@
     xmlns:helpers="clr-namespace:Tazora.Helpers">
 
     <AbsoluteLayout
-            InputTransparent="True"
-            CascadeInputTransparent="False">
+        InputTransparent="True"
+        CascadeInputTransparent="False">
 
+        <!-- Overlay Background -->
         <BoxView
             x:Name="ChatOverlay"
             BackgroundColor="#80000000"
@@ -20,6 +21,7 @@
             </BoxView.GestureRecognizers>
         </BoxView>
 
+        <!-- Chat Popup Container -->
         <Border
             x:Name="ChatPopup"
             IsVisible="False"
@@ -33,6 +35,7 @@
 
             <Grid RowDefinitions="Auto,*,Auto" Padding="16">
 
+                <!-- Header -->
                 <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,12">
                     <Border
                         Grid.Column="0"
@@ -68,6 +71,7 @@
 
                 <BoxView Grid.Row="0" HeightRequest="1" Color="{StaticResource TazoraDivider}" VerticalOptions="End" />
 
+                <!-- Chat Body -->
                 <ScrollView Grid.Row="1" Padding="0,12" x:Name="ChatScrollView">
                     <VerticalStackLayout x:Name="ChatMessagesContainer" Spacing="12">
                         <Border
@@ -83,18 +87,24 @@
                     </VerticalStackLayout>
                 </ScrollView>
 
+                <!-- Input Footer Area (Düzeltilen Beyaz Alan) -->
                 <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="0,8,0,0">
                     <Border
                         Grid.Column="0"
-                        BackgroundColor="{StaticResource TazoraBackground}"
-                        StrokeShape="RoundRectangle 20" Stroke="Transparent"
-                        Padding="12,4">
+                        BackgroundColor="White"
+                        Stroke="{StaticResource TazoraBorder}"
+                        StrokeThickness="1"
+                        StrokeShape="RoundRectangle 20"
+                        Padding="12,2">
                         <Entry
                             x:Name="TxtUserPrompt"
-                            
                             Placeholder="Örn: Tavuklu pilav yapmak istiyorum..."
-                            FontFamily="InterRegular" FontSize="13"
+                            PlaceholderColor="{StaticResource TazoraTextMuted}"
+                            BackgroundColor="White"
                             TextColor="{StaticResource TazoraTextPrimary}"
+                            FontFamily="InterRegular" 
+                            FontSize="13"
+                            HeightRequest="40"
                             Completed="OnSendPromptClicked" />
                     </Border>
 
@@ -102,13 +112,16 @@
                         Grid.Column="1"
                         Text="Gönder"
                         Style="{StaticResource TazoraAddButton}"
-                        FontSize="12" HeightRequest="40" CornerRadius="20"
+                        FontSize="12" 
+                        HeightRequest="42" 
+                        CornerRadius="21"
                         Clicked="OnSendPromptClicked" />
                 </Grid>
 
             </Grid>
         </Border>
 
+        <!-- Floating Chat Icon Button -->
         <Border
             WidthRequest="58" HeightRequest="58"
             BackgroundColor="{StaticResource TazoraPrimary}"

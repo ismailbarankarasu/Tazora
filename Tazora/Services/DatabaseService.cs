@@ -40,6 +40,8 @@ public class DatabaseService
         await _database.CreateTableAsync<User>();
         await _database.CreateTableAsync<CustomerOrder>();
         await _database.CreateTableAsync<OrderItem>();
+        await _database.CreateTableAsync<Coupon>();
+
 
         await SeedDataAsync();
 
@@ -51,13 +53,29 @@ public class DatabaseService
             throw new InvalidOperationException(
                 "Seed işlemi için veritabanı bağlantısı bulunamadı.");
 
+        var couponCount = await _database.Table<Coupon>().CountAsync();
+        if (couponCount == 0)
+        {
+            var defaultCoupons = new List<Coupon>
+    {
+        new Coupon { Code = "TAZORA10", DiscountRate = 10, MinimumBasketAmount = 0, IsActive = true },
+        new Coupon { Code = "SPIN25", DiscountAmount = 25, MinimumBasketAmount = 50, IsActive = true },
+        new Coupon { Code = "SPIN50", DiscountAmount = 50, MinimumBasketAmount = 100, IsActive = true },
+        new Coupon { Code = "FIRSAT100", DiscountAmount = 100, MinimumBasketAmount = 200, IsActive = true },
+        new Coupon { Code = "FIRSAT250", DiscountAmount = 250, MinimumBasketAmount = 500, IsActive = true }
+    };
+
+            await _database.InsertAllAsync(defaultCoupons);
+        }
+
+
         var categoryCount = await _database
             .Table<Category>()
             .CountAsync();
 
         if (categoryCount > 0)
             return;
-
+       
         var categories = new List<Category>
     {
         new()
@@ -102,6 +120,7 @@ public class DatabaseService
             IconCode = "\ue8cc",
             DisplayOrder = 6
         }
+
     };
 
         foreach (var category in categories)
@@ -272,7 +291,16 @@ public class DatabaseService
             ?? throw new InvalidOperationException(
                 "Veritabanı bağlantısı oluşturulamadı.");
     }
+    public async Task<Coupon?> GetCouponByCodeAsync(string code)
+    {
+        if (string.IsNullOrWhiteSpace(code))
+            return null;
 
+        var cleanCode = code.Trim().ToUpperInvariant();
+        var allActiveCoupons = await _database.Table<Coupon>().Where(c => c.IsActive).ToListAsync();
+
+        return allActiveCoupons.FirstOrDefault(c => c.Code.Equals(cleanCode, StringComparison.OrdinalIgnoreCase));
+    }
     public async Task<List<Category>> GetCategoriesAsync()
     {
         var database = await GetDatabaseAsync();

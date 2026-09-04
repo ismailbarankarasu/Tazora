@@ -216,4 +216,9 @@ public partial class ProfilePage : ContentPage
                 new NavigationPage(loginPage);
         }
     }
+    private async void OnSpinWheelTapped(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new SpinWheelPage());
+
+    }
 }

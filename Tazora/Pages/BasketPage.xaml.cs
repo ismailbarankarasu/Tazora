@@ -12,6 +12,7 @@ public partial class BasketPage : ContentPage
     private readonly DatabaseService _databaseService;
     private readonly AppSession _appSession;
     private List<BasketDisplayItem> _basketItems = [];
+    private Coupon? _appliedCoupon;
     private bool _isUpdating;
 
     public BasketPage(DatabaseService databaseService, AppSession appSession)
@@ -34,17 +35,11 @@ public partial class BasketPage : ContentPage
             BasketLoadingIndicator.IsVisible = true;
             BasketLoadingIndicator.IsRunning = true;
 
-            var basketItems =
-                await _databaseService.GetBasketItemsAsync();
+            var basketItems = await _databaseService.GetBasketItemsAsync();
+            var products = await _databaseService.GetProductsAsync();
+            var discounts = await _databaseService.GetActiveDiscountsAsync();
 
-            var products =
-                await _databaseService.GetProductsAsync();
-
-            var discounts =
-                await _databaseService.GetActiveDiscountsAsync();
-
-            var productsById =
-                products.ToDictionary(product => product.Id);
+            var productsById = products.ToDictionary(product => product.Id);
 
             var discountsByProductId = discounts
                 .Where(discount => discount.ProductId.HasValue)
@@ -56,16 +51,12 @@ public partial class BasketPage : ContentPage
                         .First());
 
             _basketItems = basketItems
-                .Where(item =>
-                    productsById.ContainsKey(item.ProductId))
+                .Where(item => productsById.ContainsKey(item.ProductId))
                 .Select(item =>
                 {
-                    var product =
-                        productsById[item.ProductId];
+                    var product = productsById[item.ProductId];
 
-                    discountsByProductId.TryGetValue(
-                        product.Id,
-                        out var discount);
+                    discountsByProductId.TryGetValue(product.Id, out var discount);
 
                     return new BasketDisplayItem
                     {
@@ -74,15 +65,13 @@ public partial class BasketPage : ContentPage
                         Unit = product.Unit,
                         ImageName = product.ImageName,
                         Price = product.Price,
-                        DiscountRate =
-                            discount?.DiscountRate ?? 0,
+                        DiscountRate = discount?.DiscountRate ?? 0,
                         Quantity = item.Quantity
                     };
                 })
                 .ToList();
 
-            BasketCollectionView.ItemsSource =
-                _basketItems;
+            BasketCollectionView.ItemsSource = _basketItems;
 
             UpdateSummary();
         }
@@ -90,10 +79,7 @@ public partial class BasketPage : ContentPage
         {
             System.Diagnostics.Debug.WriteLine(exception);
 
-            await DisplayAlert(
-                "Bir Hata Oluştu",
-                "Sepet bilgileri yüklenemedi.",
-                "Tamam");
+            await DisplayAlert("Bir Hata Oluştu", "Sepet bilgileri yüklenemedi.", "Tamam");
         }
         finally
         {
@@ -104,115 +90,143 @@ public partial class BasketPage : ContentPage
 
     private void UpdateSummary()
     {
-        var totalQuantity =
-            _basketItems.Sum(item => item.Quantity);
+        var totalQuantity = _basketItems.Sum(item => item.Quantity);
+        var subtotal = _basketItems.Sum(item => item.LineTotal);
 
-        var subtotal =
-            _basketItems.Sum(item => item.LineTotal);
+        var deliveryFee = subtotal == 0 || subtotal >= FreeDeliveryLimit ? 0 : DeliveryFee;
 
-        var deliveryFee =
-            subtotal == 0 || subtotal >= FreeDeliveryLimit
-                ? 0
-                : DeliveryFee;
+        // Kupon Hesaplama Logic
+        decimal couponDiscountAmount = 0;
 
-        var total =
-            subtotal + deliveryFee;
-
-        BasketItemCountLabel.Text =
-            $"{totalQuantity} ürün";
-
-        BasketTotalLabel.Text =
-            $"{total:N2} TL";
-
-        CheckoutButton.IsEnabled =
-            _basketItems.Count > 0;
-
-        FreeDeliveryProgressBar.Progress =
-            subtotal <= 0
-                ? 0
-                : (double)Math.Min(
-                    subtotal / FreeDeliveryLimit,
-                    1);
-
-        if (subtotal <= 0)
+        if (_appliedCoupon != null)
         {
-            FreeDeliveryLabel.Text =
-                "Ücretsiz teslimat için sepetine ürün ekle";
-        }
-        else if (subtotal >= FreeDeliveryLimit)
-        {
-            FreeDeliveryLabel.Text =
-                "Ücretsiz teslimat kazandın!";
+            if (subtotal < _appliedCoupon.MinimumBasketAmount)
+            {
+                // Sepet tutarı minimum limitin altına düştüyse kuponu iptal et
+                _appliedCoupon = null;
+                CouponDiscountRow.IsVisible = false;
+                CouponEntry.Text = string.Empty;
+                DisplayAlert("Kupon İptal Edildi", $"Bu kupon sadece {_appliedCoupon?.MinimumBasketAmount:N2} TL ve üzeri alışverişlerde geçerlidir.", "Tamam");
+            }
+            else
+            {
+                if (_appliedCoupon.DiscountAmount > 0)
+                {
+                    couponDiscountAmount = _appliedCoupon.DiscountAmount;
+                }
+                else if (_appliedCoupon.DiscountRate > 0)
+                {
+                    couponDiscountAmount = subtotal * (_appliedCoupon.DiscountRate / 100m);
+                }
+
+                CouponDiscountRow.IsVisible = true;
+                CouponCodeLabel.Text = _appliedCoupon.Code;
+            }
         }
         else
         {
-            var remaining =
-                FreeDeliveryLimit - subtotal;
-
-            FreeDeliveryLabel.Text =
-                $"Ücretsiz teslimat için {remaining:N2} TL daha ekle";
+            CouponDiscountRow.IsVisible = false;
         }
-    }
 
-    private async void OnIncreaseClicked(
-        object sender,
-        EventArgs e)
-    {
-        if (_isUpdating ||
-            sender is not Button button ||
-            button.CommandParameter is not int productId)
+        // Toplam Fiyat Hesaplama
+        var total = subtotal + deliveryFee - couponDiscountAmount;
+        if (total < 0) total = 0; // Fiyat eksiye düşmesin
+
+        BasketItemCountLabel.Text = $"{totalQuantity} ürün";
+        BasketTotalLabel.Text = $"{total:N2} TL";
+
+        CheckoutButton.IsEnabled = _basketItems.Count > 0;
+
+        // Ücretsiz Kargo İlerleme Çubuğu
+        FreeDeliveryProgressBar.Progress = subtotal <= 0 ? 0 : (double)Math.Min(subtotal / FreeDeliveryLimit, 1);
+
+        if (subtotal <= 0)
         {
-            return;
+            FreeDeliveryLabel.Text = "Ücretsiz teslimat için sepetine ürün ekle";
         }
-
-        var item = _basketItems
-            .FirstOrDefault(item =>
-                item.ProductId == productId);
-
-        if (item is null)
-            return;
-
-        await UpdateQuantityAsync(
-            productId,
-            item.Quantity + 1);
-    }
-
-    private async void OnDecreaseClicked(
-        object sender,
-        EventArgs e)
-    {
-        if (_isUpdating ||
-            sender is not Button button ||
-            button.CommandParameter is not int productId)
+        else if (subtotal >= FreeDeliveryLimit)
         {
+            FreeDeliveryLabel.Text = "Ücretsiz teslimat kazandın!";
+        }
+        else
+        {
+            var remaining = FreeDeliveryLimit - subtotal;
+            FreeDeliveryLabel.Text = $"Ücretsiz teslimat için {remaining:N2} TL daha ekle";
+        }
+    }
+
+    private async void OnApplyCouponClicked(object sender, EventArgs e)
+    {
+        var code = CouponEntry.Text?.Trim();
+
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            await DisplayAlert("Uyarı", "Lütfen bir kupon kodu giriniz.", "Tamam");
             return;
         }
 
-        var item = _basketItems
-            .FirstOrDefault(item =>
-                item.ProductId == productId);
-
-        if (item is null)
+        var subtotal = _basketItems.Sum(item => item.LineTotal);
+        if (subtotal <= 0)
+        {
+            await DisplayAlert("Uyarı", "Boş sepete kupon uygulanamaz.", "Tamam");
             return;
+        }
 
-        await UpdateQuantityAsync(
-            productId,
-            item.Quantity - 1);
+        // DB'den kuponu getir
+        var coupon = await _databaseService.GetCouponByCodeAsync(code);
+
+        if (coupon == null)
+        {
+            await DisplayAlert("Geçersiz Kupon", "Girdiğiniz kupon kodu bulunamadı veya süresi dolmuş.", "Tamam");
+            return;
+        }
+
+        if (subtotal < coupon.MinimumBasketAmount)
+        {
+            await DisplayAlert("Yetersiz Sepet Tutarı", $"Bu kuponu kullanabilmek için en az {coupon.MinimumBasketAmount:N2} TL tutarında ürün eklemelisiniz.", "Tamam");
+            return;
+        }
+
+        _appliedCoupon = coupon;
+        UpdateSummary();
+        await DisplayAlert("Tebrikler!", "Kupon kodu başarıyla uygulandı.", "Tamam");
     }
 
-    private async Task UpdateQuantityAsync(
-        int productId,
-        int quantity)
+    private void OnRemoveCouponTapped(object sender, TappedEventArgs e)
+    {
+        _appliedCoupon = null;
+        CouponEntry.Text = string.Empty;
+        UpdateSummary();
+    }
+
+    private async void OnIncreaseClicked(object sender, EventArgs e)
+    {
+        if (_isUpdating || sender is not Button button || button.CommandParameter is not int productId)
+            return;
+
+        var item = _basketItems.FirstOrDefault(item => item.ProductId == productId);
+        if (item is null) return;
+
+        await UpdateQuantityAsync(productId, item.Quantity + 1);
+    }
+
+    private async void OnDecreaseClicked(object sender, EventArgs e)
+    {
+        if (_isUpdating || sender is not Button button || button.CommandParameter is not int productId)
+            return;
+
+        var item = _basketItems.FirstOrDefault(item => item.ProductId == productId);
+        if (item is null) return;
+
+        await UpdateQuantityAsync(productId, item.Quantity - 1);
+    }
+
+    private async Task UpdateQuantityAsync(int productId, int quantity)
     {
         try
         {
             _isUpdating = true;
-
-            await _databaseService
-                .UpdateBasketQuantityAsync(
-                    productId,
-                    quantity);
-
+            await _databaseService.UpdateBasketQuantityAsync(productId, quantity);
             await LoadBasketAsync();
         }
         finally
@@ -221,24 +235,15 @@ public partial class BasketPage : ContentPage
         }
     }
 
-    private async void OnRemoveClicked(
-        object sender,
-        EventArgs e)
+    private async void OnRemoveClicked(object sender, EventArgs e)
     {
-        if (_isUpdating ||
-            sender is not Button button ||
-            button.CommandParameter is not int productId)
-        {
+        if (_isUpdating || sender is not Button button || button.CommandParameter is not int productId)
             return;
-        }
 
         try
         {
             _isUpdating = true;
-
-            await _databaseService
-                .RemoveProductFromBasketAsync(productId);
-
+            await _databaseService.RemoveProductFromBasketAsync(productId);
             await LoadBasketAsync();
         }
         finally
@@ -247,12 +252,9 @@ public partial class BasketPage : ContentPage
         }
     }
 
-    private async void OnClearBasketTapped(
-        object sender,
-        TappedEventArgs e)
+    private async void OnClearBasketTapped(object sender, TappedEventArgs e)
     {
-        if (_basketItems.Count == 0)
-            return;
+        if (_basketItems.Count == 0) return;
 
         var shouldClear = await DisplayAlert(
             "Sepeti Temizle",
@@ -260,30 +262,24 @@ public partial class BasketPage : ContentPage
             "Temizle",
             "Vazgeç");
 
-        if (!shouldClear)
-            return;
+        if (!shouldClear) return;
+
+        _appliedCoupon = null;
+        CouponEntry.Text = string.Empty;
 
         await _databaseService.ClearBasketAsync();
         await LoadBasketAsync();
     }
 
-    private async void OnCheckoutClicked(
-        object sender,
-        EventArgs e)
+    private async void OnCheckoutClicked(object sender, EventArgs e)
     {
-        if (_isUpdating || _basketItems.Count == 0)
-            return;
+        if (_isUpdating || _basketItems.Count == 0) return;
 
-        var currentUser =
-            _appSession.CurrentUser;
+        var currentUser = _appSession.CurrentUser;
 
         if (currentUser is null)
         {
-            await DisplayAlert(
-                "Oturum Gerekli",
-                "Sipariş oluşturmak için giriş yapmalısın.",
-                "Tamam");
-
+            await DisplayAlert("Oturum Gerekli", "Sipariş oluşturmak için giriş yapmalısın.", "Tamam");
             return;
         }
 
@@ -293,8 +289,7 @@ public partial class BasketPage : ContentPage
             "Sipariş Ver",
             "Vazgeç");
 
-        if (!shouldCreateOrder)
-            return;
+        if (!shouldCreateOrder) return;
 
         try
         {
@@ -302,33 +297,25 @@ public partial class BasketPage : ContentPage
             CheckoutButton.IsEnabled = false;
             CheckoutButton.Text = "Hazırlanıyor...";
 
-            var orderId =
-                await _databaseService
-                    .CreateOrderFromBasketAsync(
-                        currentUser.Id);
+            var orderId = await _databaseService.CreateOrderFromBasketAsync(currentUser.Id);
 
-            await DisplayAlert(
-                "Sipariş Oluşturuldu",
-                $"#{orderId} numaralı siparişin hazırlanıyor.",
-                "Tamam");
+            _appliedCoupon = null;
+            CouponEntry.Text = string.Empty;
 
+            await DisplayAlert("Sipariş Oluşturuldu", $"#{orderId} numaralı siparişin hazırlanıyor.", "Tamam");
             await LoadBasketAsync();
         }
         catch (Exception exception)
         {
             System.Diagnostics.Debug.WriteLine(exception);
 
-            await DisplayAlert(
-                "Bir Hata Oluştu",
-                "Sipariş oluşturulamadı. Lütfen tekrar dene.",
-                "Tamam");
+            await DisplayAlert("Bir Hata Oluştu", "Sipariş oluşturulamadı. Lütfen tekrar dene.", "Tamam");
         }
         finally
         {
             _isUpdating = false;
             CheckoutButton.Text = "Siparişi Tamamla";
-            CheckoutButton.IsEnabled =
-                _basketItems.Count > 0;
+            CheckoutButton.IsEnabled = _basketItems.Count > 0;
         }
     }
 }
