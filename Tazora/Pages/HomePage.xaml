@@ -459,8 +459,12 @@
                         Text="Tümünü Gör"
                         FontFamily="InterBold"
                         FontSize="13"
-                        TextColor="{StaticResource TazoraPrimary}" />
-
+                        TextColor="{StaticResource TazoraPrimary}" 
+                        >
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAllProductsTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
                 </Grid>
 
                 <CollectionView

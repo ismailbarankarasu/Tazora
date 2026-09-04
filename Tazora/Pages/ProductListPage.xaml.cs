@@ -11,7 +11,8 @@ public partial class ProductListPage
 
     private List<HomeProductItem> _products = [];
     private int _categoryId;
-    private string _categoryName = string.Empty;
+    private List<Category> _categories = [];
+    private int _selectedCategoryId; // 0 = Tümü
     private bool _isLoaded;
 
     public ProductListPage(DatabaseService databaseService)
@@ -20,29 +21,16 @@ public partial class ProductListPage
         _databaseService = databaseService;
     }
 
-    public void ApplyQueryAttributes(
-        IDictionary<string, object> query)
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        if (query.TryGetValue(
-                "categoryId",
-                out var categoryIdValue) &&
-            int.TryParse(
-                categoryIdValue?.ToString(),
-                out var categoryId))
+        if (query.TryGetValue("categoryId", out var categoryIdValue) &&
+            int.TryParse(categoryIdValue?.ToString(), out var categoryId))
         {
-            _categoryId = categoryId;
+            _selectedCategoryId = categoryId;
         }
-
-        if (query.TryGetValue(
-                "categoryName",
-                out var categoryNameValue))
+        else
         {
-            _categoryName =
-                Uri.UnescapeDataString(
-                    categoryNameValue?.ToString()
-                    ?? string.Empty);
-
-            CategoryTitleLabel.Text = _categoryName;
+            _selectedCategoryId = 0; // parametresiz açılırsa: Tümü
         }
 
         _isLoaded = false;
@@ -52,12 +40,53 @@ public partial class ProductListPage
     {
         base.OnAppearing();
 
-        if (!_isLoaded && _categoryId > 0)
+        if (!_isLoaded)
         {
+            await LoadCategoriesAsync();
             await LoadProductsAsync();
         }
     }
+    private async Task LoadCategoriesAsync()
+    {
+        _categories = await _databaseService.GetCategoriesAsync();
+        BuildCategoryChips();
+    }
+    private void BuildCategoryChips()
+    {
+        var chips = new List<CategoryChipItem>
+        {
+            new() { Id = 0, Name = "Tümü", IsSelected = _selectedCategoryId == 0 }
+        };
 
+        chips.AddRange(_categories.Select(category => new CategoryChipItem
+        {
+            Id = category.Id,
+            Name = category.Name,
+            IsSelected = category.Id == _selectedCategoryId
+        }));
+
+        BindableLayout.SetItemsSource(CategoryChipContainer, chips);
+    }
+    private async void OnCategoryChipTapped(object sender, TappedEventArgs e)
+    {
+        if (sender is not Border border || border.GestureRecognizers.FirstOrDefault()
+                is not TapGestureRecognizer { CommandParameter: int categoryId })
+        {
+            return;
+        }
+
+        if (categoryId == _selectedCategoryId)
+            return;
+
+        _selectedCategoryId = categoryId;
+        BuildCategoryChips();
+
+        CategoryTitleLabel.Text = categoryId == 0
+            ? "Tüm Ürünler"
+            : _categories.First(c => c.Id == categoryId).Name;
+
+        await LoadProductsAsync();
+    }
     private async Task LoadProductsAsync()
     {
         try
@@ -66,41 +95,29 @@ public partial class ProductListPage
             ProductLoadingIndicator.IsVisible = true;
             ProductLoadingIndicator.IsRunning = true;
 
-            var products =
-                await _databaseService
-                    .GetProductsByCategoryAsync(_categoryId);
+            var products = _selectedCategoryId == 0
+                ? await _databaseService.GetProductsAsync()
+                : await _databaseService.GetProductsByCategoryAsync(_selectedCategoryId);
 
-            var discounts =
-                await _databaseService
-                    .GetActiveDiscountsAsync();
+            var discounts = await _databaseService.GetActiveDiscountsAsync();
 
             var discountsByProductId = discounts
                 .Where(discount => discount.ProductId.HasValue)
                 .GroupBy(discount => discount.ProductId!.Value)
                 .ToDictionary(
                     group => group.Key,
-                    group => group
-                        .OrderByDescending(item => item.DiscountRate)
-                        .First());
+                    group => group.OrderByDescending(item => item.DiscountRate).First());
 
             _products = products
                 .Select(product =>
                 {
-                    discountsByProductId.TryGetValue(
-                        product.Id,
-                        out var discount);
-
-                    return CreateProductItem(
-                        product,
-                        discount);
+                    discountsByProductId.TryGetValue(product.Id, out var discount);
+                    return CreateProductItem(product, discount);
                 })
                 .ToList();
 
-            ProductsCollectionView.ItemsSource =
-                _products;
-
-            ProductCountLabel.Text =
-                $"{_products.Count} ürün bulundu";
+            ProductsCollectionView.ItemsSource = _products;
+            ProductCountLabel.Text = $"{_products.Count} ürün bulundu";
 
             _isLoaded = true;
         }
@@ -115,7 +132,6 @@ public partial class ProductListPage
             ProductLoadingIndicator.IsVisible = false;
         }
     }
-
     private void OnSearchTextChanged(
         object sender,
         TextChangedEventArgs e)

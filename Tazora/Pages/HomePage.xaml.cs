@@ -276,4 +276,8 @@ public partial class HomePage : ContentPage
         await Shell.Current.GoToAsync(
             nameof(DiscountsPage));
     }
+    private async void OnAllProductsTapped(object sender, TappedEventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(ProductListPage));
+    }
 }

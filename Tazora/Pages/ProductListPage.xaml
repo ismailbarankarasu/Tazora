@@ -10,7 +10,7 @@
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
 
         <!-- Başlık -->
         <Grid
@@ -84,7 +84,63 @@
 
             </Grid>
         </Border>
+        <!-- Kategori çipleri -->
+        <ScrollView
+    Grid.Row="2"
+    Orientation="Horizontal"
+    HorizontalScrollBarVisibility="Never"
+    Margin="0,14,0,0">
 
+            <HorizontalStackLayout
+        x:Name="CategoryChipContainer"
+        Spacing="10"
+        Padding="20,0">
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+
+                        <Border
+                    Padding="16,9"
+                    Stroke="{StaticResource TazoraBorder}"
+                    BackgroundColor="{StaticResource TazoraSurface}">
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20" />
+                            </Border.StrokeShape>
+
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="{StaticResource TazoraPrimary}" />
+                                    <Setter Property="Stroke" Value="{StaticResource TazoraPrimary}" />
+                                </DataTrigger>
+                            </Border.Triggers>
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryChipTapped" CommandParameter="{Binding Id}" />
+                            </Border.GestureRecognizers>
+
+                            <Label
+                        Text="{Binding Name}"
+                        FontFamily="InterBold"
+                        FontSize="13">
+
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="TextColor" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSelected}" Value="False">
+                                        <Setter Property="TextColor" Value="{StaticResource TazoraTextSecondary}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                        </Border>
+
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+
+            </HorizontalStackLayout>
+        </ScrollView>
         <!-- Ürün sayısı -->
         <Label
             x:Name="ProductCountLabel"
