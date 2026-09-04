@@ -135,24 +135,33 @@
                             ColumnSpacing="12">
 
                             <Border
-                                Grid.RowSpan="2"
-                                WidthRequest="68"
-                                HeightRequest="68"
+                                WidthRequest="72"
+                                HeightRequest="72"
+                                Padding="0"
                                 BackgroundColor="{StaticResource TazoraPrimarySoft}"
                                 StrokeThickness="0">
 
                                 <Border.StrokeShape>
-                                    <RoundRectangle CornerRadius="13" />
+                                    <RoundRectangle CornerRadius="12" />
                                 </Border.StrokeShape>
 
-                                <Label
-                                    Text="{x:Static helpers:IconFont.ShoppingBag}"
-                                    FontFamily="MaterialSymbols"
-                                    FontSize="31"
-                                    TextColor="{StaticResource TazoraPrimaryLight}"
-                                    HorizontalTextAlignment="Center"
-                                    VerticalTextAlignment="Center" />
+                                <Grid>
 
+                                    <Label
+                                        Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                        FontFamily="MaterialSymbols"
+                                        FontSize="30"
+                                        TextColor="{StaticResource TazoraPrimaryLight}"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center" />
+
+                                    <Image
+                                        Source="{Binding ImageName}"
+                                        Aspect="AspectFill"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill" />
+
+                                </Grid>
                             </Border>
 
                             <Label

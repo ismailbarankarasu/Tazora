@@ -84,6 +84,8 @@ public partial class ProductDetailPage
                     ? "Bu ürün için açıklama bulunmuyor."
                     : _product.Description;
 
+            ProductImage.Source = _product.ImageName;
+
             var hasDiscount =
                 _discount is not null &&
                 _discount.DiscountRate > 0;

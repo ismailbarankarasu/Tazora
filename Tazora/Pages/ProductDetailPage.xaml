@@ -63,6 +63,7 @@
                 <Grid HeightRequest="310">
 
                     <Border
+                        Padding="0"
                         BackgroundColor="{StaticResource TazoraPrimarySoft}"
                         Stroke="{StaticResource TazoraDivider}">
 
@@ -70,14 +71,25 @@
                             <RoundRectangle CornerRadius="24" />
                         </Border.StrokeShape>
 
-                        <Label
-                            Text="{x:Static helpers:IconFont.ShoppingBag}"
-                            FontFamily="MaterialSymbols"
-                            FontSize="100"
-                            TextColor="{StaticResource TazoraPrimaryLight}"
-                            HorizontalTextAlignment="Center"
-                            VerticalTextAlignment="Center" />
+                        <Grid>
 
+                            <!-- Görsel bulunamazsa gösterilecek ikon -->
+                            <Label
+                                Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                FontFamily="MaterialSymbols"
+                                FontSize="100"
+                                TextColor="{StaticResource TazoraPrimaryLight}"
+                                HorizontalTextAlignment="Center"
+                                VerticalTextAlignment="Center" />
+
+                            <!-- Gerçek ürün görseli -->
+                            <Image
+                                x:Name="ProductImage"
+                                Aspect="AspectFill"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill" />
+
+                        </Grid>
                     </Border>
 
                     <Border

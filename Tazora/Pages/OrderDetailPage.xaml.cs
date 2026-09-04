@@ -3,6 +3,21 @@ using Tazora.Services;
 
 namespace Tazora.Pages;
 
+public class OrderItemDisplay
+{
+    public int Id { get; set; }
+
+    public string ProductName { get; set; } = string.Empty;
+
+    public decimal UnitPrice { get; set; }
+
+    public int Quantity { get; set; }
+
+    public decimal TotalPrice { get; set; }
+
+    public string? ImageName { get; set; }
+}
+
 public partial class OrderDetailPage
     : ContentPage, IQueryAttributable
 {
@@ -76,12 +91,31 @@ public partial class OrderDetailPage
                 return;
             }
 
-            var orderItems =
-                await _databaseService
-                    .GetOrderItemsByOrderIdAsync(order.Id);
+       var orderItems =
+        await _databaseService
+        .GetOrderItemsByOrderIdAsync(order.Id);
+
+            var displayItems = new List<OrderItemDisplay>();
+
+            foreach (var item in orderItems)
+            {
+                var product =
+                    await _databaseService
+                        .GetProductByIdAsync(item.ProductId);
+
+                displayItems.Add(new OrderItemDisplay
+                {
+                    Id = item.Id,
+                    ProductName = item.ProductName,
+                    UnitPrice = item.UnitPrice,
+                    Quantity = item.Quantity,
+                    TotalPrice = item.TotalPrice,
+                    ImageName = product?.ImageName
+                });
+            }
 
             OrderItemsCollectionView.ItemsSource =
-                orderItems;
+                displayItems;
 
             OrderNumberLabel.Text =
                 $"Sipariş #{order.Id}";
