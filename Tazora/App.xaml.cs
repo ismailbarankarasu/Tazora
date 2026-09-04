@@ -11,6 +11,7 @@ public partial class App : Application
     {
         InitializeComponent();
         _serviceProvider = serviceProvider;
+        UserAppTheme = AppTheme.Light;
     }
 
     protected override Window CreateWindow(

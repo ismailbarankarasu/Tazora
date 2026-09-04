@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:helpers="clr-namespace:Tazora.Helpers">
 
-    <AbsoluteLayout>
+    <AbsoluteLayout
+            InputTransparent="True"
+            CascadeInputTransparent="False">
 
         <BoxView
             x:Name="ChatOverlay"
@@ -89,6 +91,7 @@
                         Padding="12,4">
                         <Entry
                             x:Name="TxtUserPrompt"
+                            
                             Placeholder="Örn: Tavuklu pilav yapmak istiyorum..."
                             FontFamily="InterRegular" FontSize="13"
                             TextColor="{StaticResource TazoraTextPrimary}"
