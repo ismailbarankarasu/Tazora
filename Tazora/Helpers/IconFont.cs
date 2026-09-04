@@ -39,4 +39,8 @@ public static class IconFont
     public const string Settings = "\ue8b8";
     public const string Help = "\ue8fd";
     public const string Logout = "\ue9ba";
+
+    public const string Chat = "\ue0b7";
+    public const string Send = "\ue163";
+    public const string Close = "\ue5cd";
 }

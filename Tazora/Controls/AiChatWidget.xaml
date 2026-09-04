@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="Tazora.Controls.AiChatWidget"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Tazora.Helpers">
+
+    <AbsoluteLayout>
+
+        <BoxView
+            x:Name="ChatOverlay"
+            BackgroundColor="#80000000"
+            IsVisible="False"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCloseChatTapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <Border
+            x:Name="ChatPopup"
+            IsVisible="False"
+            BackgroundColor="{StaticResource TazoraSurface}"
+            StrokeShape="RoundRectangle 24"
+            Stroke="Transparent"
+            HeightRequest="460"
+            AbsoluteLayout.LayoutBounds="0.5,0.92,0.92,460"
+            AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+            Shadow="{Shadow Brush=Black, Offset='0,-4', Radius=16, Opacity=0.15}">
+
+            <Grid RowDefinitions="Auto,*,Auto" Padding="16">
+
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="0,0,0,12">
+                    <Border
+                        Grid.Column="0"
+                        WidthRequest="36" HeightRequest="36"
+                        Padding="0"
+                        BackgroundColor="{StaticResource TazoraPrimarySoft}"
+                        StrokeShape="RoundRectangle 18" Stroke="Transparent">
+                        <Label
+                            Text="{x:Static helpers:IconFont.Chat}"
+                            FontFamily="MaterialSymbols" FontSize="18"
+                            TextColor="{StaticResource TazoraPrimary}"
+                            HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" Margin="10,0,0,0" VerticalOptions="Center">
+                        <Label Text="Tazora Asistan" FontFamily="InterBold" FontSize="14"
+                               TextColor="{StaticResource TazoraTextPrimary}" />
+                        <Label Text="Tarifini yaz, malzemeleri sepete ekle" FontFamily="InterRegular" FontSize="11"
+                               TextColor="{StaticResource TazoraTextSecondary}" />
+                    </VerticalStackLayout>
+
+                    <Label
+                        Grid.Column="2"
+                        Text="{x:Static helpers:IconFont.Close}"
+                        FontFamily="MaterialSymbols" FontSize="20"
+                        TextColor="{StaticResource TazoraTextSecondary}"
+                        VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCloseChatTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <BoxView Grid.Row="0" HeightRequest="1" Color="{StaticResource TazoraDivider}" VerticalOptions="End" />
+
+                <ScrollView Grid.Row="1" Padding="0,12" x:Name="ChatScrollView">
+                    <VerticalStackLayout x:Name="ChatMessagesContainer" Spacing="12">
+                        <Border
+                            BackgroundColor="{StaticResource TazoraPrimarySoft}"
+                            StrokeShape="RoundRectangle 16" Stroke="Transparent"
+                            Padding="14" HorizontalOptions="Start" MaximumWidthRequest="280">
+                            <Label
+                                Text="Merhaba! Yapmak istediğin yemeği yaz, malzemeleri listeleyeyim."
+                                FontFamily="InterRegular" FontSize="13"
+                                TextColor="{StaticResource TazoraTextPrimary}"
+                                LineBreakMode="WordWrap" />
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+
+                <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8" Padding="0,8,0,0">
+                    <Border
+                        Grid.Column="0"
+                        BackgroundColor="{StaticResource TazoraBackground}"
+                        StrokeShape="RoundRectangle 20" Stroke="Transparent"
+                        Padding="12,4">
+                        <Entry
+                            x:Name="TxtUserPrompt"
+                            Placeholder="Örn: Tavuklu pilav yapmak istiyorum..."
+                            FontFamily="InterRegular" FontSize="13"
+                            TextColor="{StaticResource TazoraTextPrimary}"
+                            Completed="OnSendPromptClicked" />
+                    </Border>
+
+                    <Button
+                        Grid.Column="1"
+                        Text="Gönder"
+                        Style="{StaticResource TazoraAddButton}"
+                        FontSize="12" HeightRequest="40" CornerRadius="20"
+                        Clicked="OnSendPromptClicked" />
+                </Grid>
+
+            </Grid>
+        </Border>
+
+        <Border
+            WidthRequest="58" HeightRequest="58"
+            BackgroundColor="{StaticResource TazoraPrimary}"
+            StrokeShape="RoundRectangle 29" Stroke="Transparent"
+            AbsoluteLayout.LayoutBounds="0.92,0.85,58,58"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            Shadow="{Shadow Brush=Black, Offset='0,4', Radius=8, Opacity=0.3}">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnOpenChatTapped" />
+            </Border.GestureRecognizers>
+            <Label
+                Text="{x:Static helpers:IconFont.Chat}"
+                FontFamily="MaterialSymbols" FontSize="26"
+                TextColor="White"
+                HorizontalOptions="Center" VerticalOptions="Center" />
+        </Border>
+
+    </AbsoluteLayout>
+</ContentView>

@@ -121,9 +121,7 @@ public partial class HomePage : ContentPage
                 DiscountedProductContainer,
                 discountedProducts);
 
-            BindableLayout.SetItemsSource(
-                PopularProductContainer,
-                popularItems);
+            PopularProductContainer.ItemsSource = popularItems;
 
             _isLoaded = true;
         }

@@ -463,20 +463,23 @@
 
                 </Grid>
 
-                <FlexLayout
+                <CollectionView
                     x:Name="PopularProductContainer"
-                    Margin="0,16,0,0"
-                    Wrap="Wrap"
-                    Direction="Row"
-                    JustifyContent="SpaceBetween">
+                     Margin="0,16,0,0"
+                    VerticalScrollBarVisibility="Never">
 
-                    <BindableLayout.ItemTemplate>
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout
+                            Orientation="Vertical"
+                            Span="2"
+                            HorizontalItemSpacing="6"
+                            VerticalItemSpacing="14" />
+                    </CollectionView.ItemsLayout>
 
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
 
                             <Border
-                                FlexLayout.Basis="48%"
-                                Margin="0,0,0,14"
                                 Padding="10"
                                 BackgroundColor="{StaticResource TazoraSurface}"
                                 Stroke="{StaticResource TazoraDivider}">
@@ -490,9 +493,9 @@
                                     <Grid HeightRequest="135">
 
                                         <Border
-                            Padding="0"
-                            StrokeThickness="0"
-                            BackgroundColor="{StaticResource TazoraPrimarySoft}">
+                                            Padding="0"
+                                            StrokeThickness="0"
+                                            BackgroundColor="{StaticResource TazoraPrimarySoft}">
 
                                             <Border.StrokeShape>
                                                 <RoundRectangle CornerRadius="14" />
@@ -501,18 +504,18 @@
                                             <Grid>
 
                                                 <Label
-                                    Text="{x:Static helpers:IconFont.ShoppingBag}"
-                                    FontFamily="MaterialSymbols"
-                                    FontSize="50"
-                                    TextColor="{StaticResource TazoraPrimaryLight}"
-                                    HorizontalTextAlignment="Center"
-                                    VerticalTextAlignment="Center" />
+                                                    Text="{x:Static helpers:IconFont.ShoppingBag}"
+                                                    FontFamily="MaterialSymbols"
+                                                    FontSize="50"
+                                                    TextColor="{StaticResource TazoraPrimaryLight}"
+                                                    HorizontalTextAlignment="Center"
+                                                    VerticalTextAlignment="Center" />
 
                                                 <Image
-                                    Source="{Binding ImageName}"
-                                    Aspect="AspectFill"
-                                    HorizontalOptions="Fill"
-                                    VerticalOptions="Fill" />
+                                                    Source="{Binding ImageName}"
+                                                    Aspect="AspectFill"
+                                                    HorizontalOptions="Fill"
+                                                    VerticalOptions="Fill" />
 
                                             </Grid>
 
@@ -578,9 +581,9 @@
 
                         </DataTemplate>
 
-                    </BindableLayout.ItemTemplate>
+                    </CollectionView.ItemTemplate>
 
-                </FlexLayout>
+                </CollectionView>
                 <!-- Error -->
                 <Border
                     x:Name="CategoryErrorBorder"
@@ -610,7 +613,7 @@
             Grid.Row="1"
             ActiveTab="Home"
             HorizontalOptions="Fill" />
-
+        <controls:AiChatWidget Grid.RowSpan="2" />
     </Grid>
 
 </ContentPage>

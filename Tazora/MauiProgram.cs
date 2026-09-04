@@ -24,6 +24,7 @@ namespace Tazora
             builder.Services.AddTransient<ProductDetailPage>();
             builder.Services.AddTransient<DiscountsPage>();
             builder.Services.AddTransient<StatisticsPage>();
+            builder.Services.AddSingleton<AiService>();
             builder
                 .UseMauiApp<App>()
                     .ConfigureFonts(fonts =>
